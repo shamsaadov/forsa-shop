@@ -211,7 +211,7 @@ const AdminDashboardPage: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           <Link
-                            to={`/admin/products/edit/${product.id}`}
+                            to={`/admin/products/edit/${product.slug}`}
                             className="text-blue-600 hover:text-blue-800 mr-3"
                           >
                             Редактировать

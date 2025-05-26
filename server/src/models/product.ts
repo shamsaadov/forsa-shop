@@ -45,6 +45,40 @@ const productModel = {
     return rows;
   },
 
+  // Добавить изображение в галерею
+  async addProductGalleryImage(
+    productId: number,
+    imageUrl: string,
+    isPrimary: boolean,
+  ): Promise<number> {
+    const [result] = await pool.query<ResultSetHeader>(
+      `INSERT INTO product_gallery (product_id, image_url, is_primary)
+     VALUES (?, ?, ?)`,
+      [productId, imageUrl, isPrimary ? 1 : 0],
+    );
+    return result.insertId;
+  },
+
+  // Удалить все изображения из галереи товара
+  async deleteProductGalleryImages(
+    productId: number | string,
+  ): Promise<boolean> {
+    const [result] = await pool.query<OkPacket>(
+      `DELETE FROM product_gallery WHERE product_id = ?`,
+      [productId],
+    );
+    return result.affectedRows > 0;
+  },
+
+  // (Опционально) Удалить одно изображение по его ID
+  async deleteProductGalleryImage(imageId: number | string): Promise<boolean> {
+    const [result] = await pool.query<OkPacket>(
+      `DELETE FROM product_gallery WHERE id = ?`,
+      [imageId],
+    );
+    return result.affectedRows > 0;
+  },
+
   // Поиск товаров с фильтрами
   async searchProducts(
     search?: string,

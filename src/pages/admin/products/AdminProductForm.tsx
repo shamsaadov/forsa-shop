@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, Save, Loader2, Upload, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Save, Loader2, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,9 +13,11 @@ import {
   updateProduct,
 } from "@/services/productService";
 import { getCategories } from "@/services/categoryService";
-import { Product, Category } from "@/types";
+import { Category } from "@/types";
+import { ProductSpecification } from "@/types/product.ts";
 
 interface FormData {
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -23,7 +25,8 @@ interface FormData {
   slug: string;
   stock: number;
   category_ids: string[];
-  specifications: any;
+  specifications: ProductSpecification[];
+  gallery_images: string[];
 }
 
 const AdminProductForm: React.FC = () => {
@@ -32,6 +35,7 @@ const AdminProductForm: React.FC = () => {
   const isEditMode = !!id;
 
   const [formData, setFormData] = useState<FormData>({
+    id: "",
     name: "",
     description: "",
     price: 0,
@@ -40,6 +44,7 @@ const AdminProductForm: React.FC = () => {
     stock: 0,
     category_ids: [],
     specifications: [],
+    gallery_images: [],
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -62,9 +67,10 @@ const AdminProductForm: React.FC = () => {
 
         // Если режим редактирования, загружаем данные товара
         if (isEditMode && id) {
-          const productData: any = await getProductById(id);
+          const productData = await getProductById(id);
 
           setFormData({
+            id: productData.id,
             name: productData.name,
             description: productData.description || "",
             price: productData.price,
@@ -73,6 +79,9 @@ const AdminProductForm: React.FC = () => {
             stock: productData.stock,
             category_ids: productData.categories || [],
             specifications: productData.specifications || [],
+            gallery_images: productData.gallery_images
+              ? productData.gallery_images.map((img: any) => img.image_url)
+              : [],
           });
         }
 
@@ -179,9 +188,7 @@ const AdminProductForm: React.FC = () => {
   const removeSpecification = (index: number) => {
     setFormData((prev) => ({
       ...prev,
-      specifications: prev.specifications.filter(
-        (_: any, i: any) => i !== index,
-      ),
+      specifications: prev.specifications.filter((_, i) => i !== index),
     }));
   };
 
@@ -191,6 +198,35 @@ const AdminProductForm: React.FC = () => {
       ...prev,
       image_url: url,
     }));
+  };
+
+  // Обработчик загрузки изображений в галерею
+  const handleGalleryImageUpload = (url: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      gallery_images: [...prev.gallery_images, url],
+    }));
+  };
+
+  // Удаление изображения из галереи
+  const removeGalleryImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      gallery_images: prev.gallery_images.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Перемещение изображения в галерее
+  const moveGalleryImage = (fromIndex: number, toIndex: number) => {
+    setFormData((prev) => {
+      const newGalleryImages = [...prev.gallery_images];
+      const [removed] = newGalleryImages.splice(fromIndex, 1);
+      newGalleryImages.splice(toIndex, 0, removed);
+      return {
+        ...prev,
+        gallery_images: newGalleryImages,
+      };
+    });
   };
 
   // Генерация слага из названия
@@ -232,7 +268,7 @@ const AdminProductForm: React.FC = () => {
     // Проверка на заполненность спецификаций
     if (
       formData.specifications.some(
-        (spec: any) => !spec.name.trim() || !spec.value.trim(),
+        (spec) => !spec.name.trim() || !spec.value.trim(),
       )
     ) {
       newErrors.specifications = "Все поля характеристик должны быть заполнены";
@@ -256,7 +292,7 @@ const AdminProductForm: React.FC = () => {
 
       if (isEditMode && id) {
         // Обновление существующего товара
-        await updateProduct(id, formData);
+        await updateProduct(formData.id, formData);
       } else {
         // Создание нового товара
         await createProduct(formData);
@@ -271,6 +307,8 @@ const AdminProductForm: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
+  console.log(formData);
 
   return (
     <AdminLayout>
@@ -411,13 +449,68 @@ const AdminProductForm: React.FC = () => {
                   {/* Изображение товара */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Изображение товара
+                      Основное изображение товара
                     </label>
                     <FileUpload
                       onUploadComplete={handleImageUpload}
                       currentImage={formData.image_url}
                       uploadType="product"
                     />
+                  </div>
+
+                  {/* Галерея изображений */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Галерея изображений
+                    </label>
+                    <div className="space-y-3">
+                      {/* Загрузка нового изображения */}
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-3">
+                        <FileUpload
+                          onUploadComplete={handleGalleryImageUpload}
+                          uploadType="product"
+                          className="w-full"
+                        />
+                      </div>
+
+                      {/* Список загруженных изображений */}
+                      {formData.gallery_images.length > 0 && (
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-gray-700">
+                            Загруженные изображения (
+                            {formData.gallery_images.length})
+                          </p>
+                          <div className="grid grid-cols-2 gap-2">
+                            {formData.gallery_images.map((imageUrl, index) => (
+                              <div key={index} className="relative group">
+                                <img
+                                  src={imageUrl}
+                                  alt={`Галерея ${index + 1}`}
+                                  className="w-full h-24 object-cover rounded border"
+                                />
+                                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 rounded flex items-center justify-center">
+                                  <button
+                                    type="button"
+                                    onClick={() => removeGalleryImage(index)}
+                                    className="opacity-0 group-hover:opacity-100 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-all duration-200"
+                                    disabled={isSubmitting}
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </button>
+                                </div>
+                                <div className="absolute top-1 left-1 bg-black bg-opacity-60 text-white text-xs px-1 rounded">
+                                  {index + 1}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <p className="text-xs text-gray-500">
+                            Первое изображение будет использоваться как основное
+                            в галерее
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Слаг (URL) */}
@@ -515,7 +608,7 @@ const AdminProductForm: React.FC = () => {
                   </p>
                 ) : (
                   <div className="space-y-3">
-                    {formData.specifications.map((spec: any, index: any) => (
+                    {formData.specifications.map((spec, index) => (
                       <div
                         key={spec.id || index}
                         className="flex items-center gap-3"

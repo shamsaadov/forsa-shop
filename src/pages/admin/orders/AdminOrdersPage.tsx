@@ -579,7 +579,7 @@ const AdminOrdersPage: React.FC = () => {
                         Способ оплаты:
                       </span>
                       <span>
-                        {formatPaymentMethod(selectedOrder.payment_method)}12
+                        {formatPaymentMethod(selectedOrder.payment_method)}
                       </span>
                     </div>
                     <div className="flex justify-between">

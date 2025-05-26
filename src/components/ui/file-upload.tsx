@@ -8,6 +8,7 @@ interface FileUploadProps {
   currentImage?: string;
   className?: string;
   uploadType?: "category" | "product" | "misc";
+  showPreview?: boolean;
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
@@ -15,6 +16,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   currentImage,
   className = "",
   uploadType = "misc",
+  showPreview = true,
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,12 +46,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     // Сброс ошибки
     setError(null);
 
-    // Показываем превью загружаемого файла
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setPreview(fileReader.result as string);
-    };
-    fileReader.readAsDataURL(file);
+    // Показываем превью загружаемого файла (если включено)
+    if (showPreview) {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        setPreview(fileReader.result as string);
+      };
+      fileReader.readAsDataURL(file);
+    }
 
     // Загрузка файла на сервер
     try {
@@ -99,7 +103,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     <div className={`w-full ${className}`}>
       <div className="flex flex-col items-center">
         {/* Область предпросмотра и загрузки */}
-        {preview ? (
+        {showPreview && preview ? (
           <div className="relative w-full">
             <img
               src={preview}
@@ -117,10 +121,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           </div>
         ) : (
           <div
-            className="w-full h-64 border-2 border-dashed border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors"
+            className={`w-full border-2 border-dashed border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 transition-colors ${
+              showPreview ? "h-64" : "h-32"
+            }`}
             onClick={handleUploadClick}
           >
-            <FileImage className="h-12 w-12 text-gray-400 mb-2" />
+            <FileImage
+              className={`text-gray-400 mb-2 ${showPreview ? "h-12 w-12" : "h-8 w-8"}`}
+            />
             <p className="text-sm text-gray-500">
               Кликните или перетащите файл для загрузки
             </p>
@@ -138,6 +146,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
             onChange={handleFileChange}
             accept="image/jpeg,image/png,image/gif,image/webp"
             className="hidden"
+            multiple
           />
           <Button
             type="button"

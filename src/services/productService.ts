@@ -1,4 +1,5 @@
 import api from "./api";
+import { ProductSpecification } from "@/types/product.ts";
 
 interface ProductFormData {
   name: string;
@@ -8,7 +9,8 @@ interface ProductFormData {
   slug: string;
   stock: number;
   category_ids: string[];
-  specifications?: any;
+  specifications?: ProductSpecification[];
+  gallery_images?: string[];
 }
 
 // Получить товары по заданной категории
@@ -38,21 +40,21 @@ export const getProductBySlug = async (slug: string) => {
 
 // Создать новый товар
 export const createProduct = async (productData: ProductFormData) => {
-  const response = await api.post("/products", productData);
+  const response = await api.post("/admin/products", productData);
   return response.data;
 };
 
 // Обновить существующий товар
 export const updateProduct = async (
-  slug: string,
+  id: string,
   productData: ProductFormData,
 ) => {
-  const response = await api.put(`/products/${slug}`, productData);
+  const response = await api.put(`/admin/products/${id}`, productData);
   return response.data;
 };
 
 // Удалить товар
 export const deleteProduct = async (id: string) => {
-  const response = await api.delete(`/products/${id}`);
+  const response = await api.delete(`/admin/products/${id}`);
   return response.data;
 };

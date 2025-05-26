@@ -12,6 +12,7 @@ import {
   Phone,
   AlertCircle,
   ArrowLeft,
+  ChevronLeft,
   ChevronUp,
   ChevronDown,
 } from "lucide-react";
@@ -19,12 +20,8 @@ import api from "@/services/api";
 import { Product } from "@/types/product";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs.tsx";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ImageCarousel from "@/components/ui/image-carousel";
 
 const ProductPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -34,7 +31,6 @@ const ProductPage: React.FC = () => {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
 
@@ -113,20 +109,31 @@ const ProductPage: React.FC = () => {
   const getGalleryImages = () => {
     if (!product) return [];
 
-    // Если у товара есть галерея, используем её
+    const images: string[] = [];
+
+    // Если у товара есть галерея изображений, используем их
     if (product.gallery_images && product.gallery_images.length > 0) {
-      return product.gallery_images.map((img) => img.image_url);
+      // Сортируем по is_primary (главное изображение первым), затем по id
+      const sortedGallery = [...product.gallery_images].sort((a, b) => {
+        if (a.is_primary && !b.is_primary) return -1;
+        if (!a.is_primary && b.is_primary) return 1;
+        return a.id - b.id;
+      });
+
+      images.push(...sortedGallery.map((img) => img.image_url));
     }
 
-    // Иначе используем основное изображение
-    return product.image_url
-      ? [product.image_url]
-      : ["https://via.placeholder.com/600x600?text=Натяжной+потолок"];
-  };
+    // Если есть основное изображение и оно не входит в галерею, добавляем его первым
+    if (product.image_url && !images.includes(product.image_url)) {
+      images.unshift(product.image_url);
+    }
 
-  // Переключение активного изображения
-  const handleImageClick = (index: number) => {
-    setActiveImageIndex(index);
+    // Если нет изображений вообще, показываем заглушку
+    if (images.length === 0) {
+      images.push("https://via.placeholder.com/600x600?text=Натяжной+потолок");
+    }
+
+    return images;
   };
 
   // Получение характеристик товара
@@ -273,37 +280,11 @@ const ProductPage: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-8 mb-16">
           {/* Галерея */}
           <div className="lg:w-1/2">
-            {/* Основное изображение */}
-            <div className="mb-4 overflow-hidden rounded-lg border border-gray-200">
-              <img
-                src={galleryImages[activeImageIndex]}
-                alt={product.name}
-                className="w-full h-96 object-cover object-center"
-              />
-            </div>
-
-            {/* Миниатюры */}
-            {galleryImages.length > 1 && (
-              <div className="flex space-x-2 overflow-x-auto pb-2">
-                {galleryImages.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleImageClick(index)}
-                    className={`w-24 h-24 border rounded-md overflow-hidden flex-shrink-0 ${
-                      activeImageIndex === index
-                        ? "border-blue-500 ring-2 ring-blue-200"
-                        : "border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    <img
-                      src={image}
-                      alt={`${product.name} - изображение ${index + 1}`}
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
+            <ImageCarousel
+              images={galleryImages}
+              productName={product.name}
+              className="w-full"
+            />
           </div>
 
           {/* Информация и добавление в корзину */}
@@ -450,13 +431,13 @@ const ProductPage: React.FC = () => {
             onValueChange={setActiveTab}
           >
             <TabsList className="w-full border-b border-gray-200 grid grid-cols-3">
-              <TabsTrigger value="description" className=" text-base">
+              <TabsTrigger value="description" className="py-3 text-base">
                 Описание
               </TabsTrigger>
-              <TabsTrigger value="specifications" className=" text-base">
+              <TabsTrigger value="specifications" className="py-3 text-base">
                 Характеристики
               </TabsTrigger>
-              <TabsTrigger value="delivery" className=" text-base">
+              <TabsTrigger value="delivery" className="py-3 text-base">
                 Доставка и оплата
               </TabsTrigger>
             </TabsList>

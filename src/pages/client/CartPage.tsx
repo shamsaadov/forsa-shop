@@ -39,6 +39,8 @@ interface OrderFormData {
 const CartPage: React.FC = () => {
   const { items, removeFromCart, updateQuantity, clearCart, getCartTotal } =
     useCart();
+
+  console.log(items);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<OrderFormData>({
@@ -241,9 +243,9 @@ const CartPage: React.FC = () => {
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-7">
           {/* Таблица товаров */}
-          <div className="lg:w-2/3">
+          <div className="lg:w-3/3">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden mb-4">
               <table className="w-full">
                 <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
@@ -257,13 +259,13 @@ const CartPage: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {items.map((item: any) => (
-                    <tr key={item.id} className="hover:bg-gray-50">
+                    <tr key={item.product.id} className="hover:bg-gray-50">
                       <td className="py-4 px-4">
                         <div className="flex items-center">
-                          {item.image_url ? (
+                          {item.product.image_url ? (
                             <img
-                              src={item.image_url}
-                              alt={item.name}
+                              src={item.product.image_url}
+                              alt={item.product.name}
                               className="w-16 h-16 object-cover rounded mr-4"
                             />
                           ) : (
@@ -275,12 +277,12 @@ const CartPage: React.FC = () => {
                             to={`/products/${item.id}`}
                             className="font-medium text-gray-900 hover:text-blue-600"
                           >
-                            {item.name}
+                            {item.product.name}
                           </Link>
                         </div>
                       </td>
                       <td className="py-4 px-4 text-right font-medium">
-                        {item.price?.toLocaleString()} ₽/м²
+                        {item.product.price?.toLocaleString()} ₽/м²
                       </td>
                       <td className="py-4 px-4">
                         <div className="flex items-center justify-center space-x-2">
@@ -308,7 +310,8 @@ const CartPage: React.FC = () => {
                         </div>
                       </td>
                       <td className="py-4 px-4 text-right font-semibold">
-                        {(item.price * item.quantity)?.toLocaleString()} ₽
+                        {(item.product.price * item.quantity)?.toLocaleString()}{" "}
+                        ₽
                       </td>
                       <td className="py-4 px-4 text-center">
                         <button
@@ -371,30 +374,30 @@ const CartPage: React.FC = () => {
                   Оформить заказ
                 </Button>
 
-                <Button
-                  className="w-full bg-green-600 hover:bg-green-700 py-3 h-auto"
-                  onClick={handleAdminOrder}
-                  disabled={isSubmitting}
-                >
-                  <ClipboardCheck className="h-5 w-5 mr-2" />
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Отправка...
-                    </>
-                  ) : (
-                    "Отправить в админку"
-                  )}
-                </Button>
+                {/*<Button*/}
+                {/*  className="w-full bg-green-600 hover:bg-green-700 py-3 h-auto"*/}
+                {/*  onClick={handleAdminOrder}*/}
+                {/*  disabled={isSubmitting}*/}
+                {/*>*/}
+                {/*  <ClipboardCheck className="h-5 w-5 mr-2" />*/}
+                {/*  {isSubmitting ? (*/}
+                {/*    <>*/}
+                {/*      <Loader2 className="h-4 w-4 mr-2 animate-spin" />*/}
+                {/*      Отправка...*/}
+                {/*    </>*/}
+                {/*  ) : (*/}
+                {/*    "Отправить в админку"*/}
+                {/*  )}*/}
+                {/*</Button>*/}
 
-                <Button
-                  variant="outline"
-                  className="w-full py-3 h-auto"
-                  onClick={handleWhatsAppOrder}
-                >
-                  <Phone className="h-5 w-5 mr-2" />
-                  Заказать через WhatsApp
-                </Button>
+                {/*<Button*/}
+                {/*  variant="outline"*/}
+                {/*  className="w-full py-3 h-auto"*/}
+                {/*  onClick={handleWhatsAppOrder}*/}
+                {/*>*/}
+                {/*  <Phone className="h-5 w-5 mr-2" />*/}
+                {/*  Заказать через WhatsApp*/}
+                {/*</Button>*/}
               </div>
             </div>
 
@@ -449,6 +452,7 @@ const CartPage: React.FC = () => {
                 name="customer_phone"
                 placeholder="+7 (XXX) XXX-XX-XX"
                 value={formData.customer_phone}
+                type="number"
                 onChange={handleInputChange}
                 className={formErrors.customer_phone ? "border-red-300" : ""}
               />

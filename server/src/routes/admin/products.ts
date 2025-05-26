@@ -81,6 +81,20 @@ router.post("/", async (req: any, res: any) => {
       }
     }
 
+    // Если есть галерея изображений, добавляем их
+    if (req.body.gallery_images && req.body.gallery_images.length > 0) {
+      for (let i = 0; i < req.body.gallery_images.length; i++) {
+        const imageUrl = req.body.gallery_images[i];
+        if (imageUrl) {
+          await productModel.addProductGalleryImage(
+            productId,
+            imageUrl,
+            i === 0,
+          ); // Первое изображение делаем главным
+        }
+      }
+    }
+
     const newProduct = await productModel.getProductById(productId);
     res.status(201).json(newProduct);
   } catch (error) {
@@ -136,6 +150,26 @@ router.put("/:id", async (req: any, res: any) => {
             name: spec.name,
             value: spec.value,
           });
+        }
+      }
+    }
+
+    // Если есть галерея изображений, обновляем их
+    if (req.body.gallery_images !== undefined) {
+      // Удаляем все старые изображения галереи
+      await productModel.deleteProductGalleryImages(productId);
+
+      // Добавляем новые изображения
+      if (req.body.gallery_images.length > 0) {
+        for (let i = 0; i < req.body.gallery_images.length; i++) {
+          const imageUrl = req.body.gallery_images[i];
+          if (imageUrl) {
+            await productModel.addProductGalleryImage(
+              productId,
+              imageUrl,
+              i === 0,
+            ); // Первое изображение делаем главным
+          }
         }
       }
     }
