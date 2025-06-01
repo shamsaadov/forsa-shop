@@ -34,9 +34,6 @@ jobs:
             # Останавливаем старые контейнеры
             docker-compose down || true
             
-            # Удаляем volumes для полной пересборки БД
-            docker-compose down -v || true
-            
             # Удаляем старые образы для освобождения места
             docker system prune -f || true
             
