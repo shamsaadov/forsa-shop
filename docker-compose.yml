@@ -3,6 +3,7 @@ services:
   db:
     image: mysql:8.0
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secret}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-forsa}
@@ -10,6 +11,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secret}
     volumes:
       - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
 
   app:
     build: .
@@ -26,7 +29,7 @@ services:
     volumes:
       - ./uploads:/app/uploads
     command: >
-      sh -c "npm run init-db && node dist/index.js"
+      sh -c "sleep 30 && npm run init-db && node dist/index.js"
 
   nginx:
     image: nginx:alpine
