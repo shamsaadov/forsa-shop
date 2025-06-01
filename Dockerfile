@@ -30,18 +30,7 @@ RUN npm run build
 # переносим готовый билд фронта в папку public для отдачи статики
 COPY --from=builder-frontend /app/dist ./public
 
-# Устанавливаем MySQL клиент, bash и netcat для проверки подключения
-RUN apk add --no-cache mysql-client bash netcat-openbsd
-
-# копируем скрипт ожидания MySQL
-COPY wait-for-mysql.sh ./wait-for-mysql.sh
-RUN chmod +x ./wait-for-mysql.sh
-
-# Отладка: проверяем что файл скопировался
-RUN ls -la ./wait-for-mysql.sh
-RUN head -5 ./wait-for-mysql.sh
-
 # финальная конфигурация
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["/bin/bash", "/app/wait-for-mysql.sh"]
+CMD ["node", "dist/index.js"]
