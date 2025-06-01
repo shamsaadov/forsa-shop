@@ -1,6 +1,6 @@
 -- Создание таблицы пользователей
 CREATE TABLE IF NOT EXISTS users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id VARCHAR(36) PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   email VARCHAR(255),
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS product_gallery (
 -- Создание таблицы заказов
 CREATE TABLE IF NOT EXISTS orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
+  user_id VARCHAR(36),
   customer_name VARCHAR(255) NOT NULL,
   customer_email VARCHAR(255) NOT NULL,
   customer_phone VARCHAR(50) NOT NULL,
@@ -86,9 +86,9 @@ CREATE TABLE IF NOT EXISTS order_items (
 );
 
 -- Вставка демо-данных, если их еще нет
--- Администратор
-INSERT INTO users (username, password, email, role)
-SELECT 'admin', '$2a$10$mQP8CbFtKFAkNJXeXgJUPuq3K4SCW.xWUMwfxEd9qFgYQHQBxjWx2', 'admin@forsa-potolki.ru', 'admin'
+-- Администратор (используем UUID вместо автоинкремента)
+INSERT INTO users (id, username, password, email, role)
+SELECT 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'admin', '$2a$10$mQP8CbFtKFAkNJXeXgJUPuq3K4SCW.xWUMwfxEd9qFgYQHQBxjWx2', 'admin@forsa-potolki.ru', 'admin'
 WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = 'admin');
 
 -- Некоторые категории
