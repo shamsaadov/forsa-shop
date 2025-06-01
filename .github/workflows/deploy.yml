@@ -32,17 +32,17 @@ jobs:
             git reset --hard origin/main
             
             # Останавливаем старые контейнеры
-            docker-compose -f docker-compose.prod.yml down || true
+            docker-compose down || true
             
             # Удаляем старые образы для освобождения места
             docker system prune -f || true
             
             # Собираем и запускаем новые контейнеры
-            docker-compose -f docker-compose.prod.yml up --build -d
+            docker-compose up --build -d
             
             # Проверяем статус
-            docker-compose -f docker-compose.prod.yml ps
+            docker-compose ps
             
             # Показываем логи для диагностики
-            docker-compose -f docker-compose.prod.yml logs --tail=50
+            docker-compose logs --tail=50
           '
