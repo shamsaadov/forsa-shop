@@ -34,8 +34,12 @@ COPY --from=builder-frontend /app/dist ./public
 RUN apk add --no-cache mysql-client
 
 # копируем скрипт ожидания MySQL
-COPY wait-for-mysql.sh ./
-RUN chmod +x wait-for-mysql.sh
+COPY wait-for-mysql.sh ./wait-for-mysql.sh
+RUN chmod +x ./wait-for-mysql.sh
+
+# Отладка: проверяем что файл скопировался
+RUN ls -la ./wait-for-mysql.sh
+RUN head -5 ./wait-for-mysql.sh
 
 # финальная конфигурация
 ENV NODE_ENV=production
