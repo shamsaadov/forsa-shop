@@ -37,18 +37,6 @@ jobs:
             # Удаляем старые образы для освобождения места
             docker system prune -f || true
             
-            # Создаем .env файл для production
-            cat > .env << EOF
-            MYSQL_ROOT_PASSWORD=ForSa2025!SecurePass
-            MYSQL_DATABASE=forsa
-            MYSQL_USER=forsa
-            MYSQL_PASSWORD=ForSa2025!AppPass
-            EOF
-            
-            # Создаем папку для uploads
-            mkdir -p uploads
-            chmod 755 uploads
-            
             # Собираем и запускаем новые контейнеры
             docker-compose -f docker-compose.prod.yml up --build -d
             
