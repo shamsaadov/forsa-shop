@@ -12,6 +12,7 @@ wait_for_mysql() {
     local port="$2"
     local user="$3"
     local password="$4"
+    local root_password="${MYSQL_ROOT_PASSWORD:-secret}"
     local max_attempts=60
     local attempt=1
 
@@ -22,12 +23,26 @@ wait_for_mysql() {
         if nc -z "$host" "$port" 2>/dev/null; then
             echo "Network connection to $host:$port is OK"
             
-            # Теперь пробуем подключиться к MySQL
-            if mysql -h"$host" -P"$port" -u"$user" -p"$password" -e "SELECT 1" >/dev/null 2>&1; then
-                echo "MySQL is ready!"
-                return 0
+            # Проверяем подключение как root (чтобы убедиться что MySQL готов)
+            if mysql -h"$host" -P"$port" -uroot -p"$root_password" -e "SELECT 1" >/dev/null 2>&1; then
+                echo "MySQL root connection is OK"
+                
+                # Теперь пробуем подключиться как обычный пользователь
+                if mysql -h"$host" -P"$port" -u"$user" -p"$password" -e "SELECT 1" >/dev/null 2>&1; then
+                    echo "MySQL user connection is OK!"
+                    return 0
+                else
+                    echo "MySQL user '$user' connection failed - checking if user exists..."
+                    # Проверим существует ли пользователь
+                    user_exists=$(mysql -h"$host" -P"$port" -uroot -p"$root_password" -se "SELECT COUNT(*) FROM mysql.user WHERE User='$user';" 2>/dev/null)
+                    if [ "$user_exists" = "1" ]; then
+                        echo "User '$user' exists, but password might be wrong"
+                    else
+                        echo "User '$user' does not exist - MySQL still initializing"
+                    fi
+                fi
             else
-                echo "MySQL connection failed (auth/ready issue)"
+                echo "MySQL root connection failed - MySQL still starting"
             fi
         else
             echo "Cannot connect to $host:$port (network issue)"
