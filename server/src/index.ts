@@ -17,7 +17,7 @@ import uploadRoutes from "./routes/uploads";
 dotenv.config();
 
 const app = express();
-const PORT = 3333;
+const PORT = 3000;
 
 // Настраиваем CORS с нужными опциями
 const corsOptions = {
