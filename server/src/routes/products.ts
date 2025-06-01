@@ -21,13 +21,27 @@ router.get("/", async (req, res) => {
       minPrice ? Number(minPrice) : undefined,
       maxPrice ? Number(maxPrice) : undefined,
       Number(limit),
-      Number(offset),
+      Number(offset)
     );
 
     res.json(products);
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ message: "Ошибка при получении товаров" });
+  }
+});
+
+// Получить товары по категории
+router.get("/category/:categoryId", async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const products = await productModel.getProductsByCategory(categoryId);
+    res.json(products);
+  } catch (error) {
+    console.error("Error fetching products by category:", error);
+    res
+      .status(500)
+      .json({ message: "Ошибка сервера при получении товаров по категории" });
   }
 });
 

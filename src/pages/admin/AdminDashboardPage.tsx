@@ -14,13 +14,12 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { getProducts } from "@/services/productService";
 import { getCategories } from "@/services/categoryService";
 import { Product, Category } from "@/types";
-import { Order } from "../../../server/src/models/order.ts";
 import api from "@/services/api.ts";
 
 const AdminDashboardPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

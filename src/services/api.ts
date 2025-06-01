@@ -1,12 +1,13 @@
-import axios from 'axios';
-import { getToken, removeToken } from '@/utils/tokenUtils';
+import axios from "axios";
+import { getToken, removeToken } from "@/utils/tokenUtils";
 
+console.log(import.meta.env);
 // Создаем экземпляр Axios
 const api = axios.create({
-  baseURL: 'http://localhost:3333/api', // В разработке
-  // baseURL: '/api', // В продакшене
+  baseURL: import.meta.env.VITE_BASE_URL || "/api", // Fallback to '/api' if env var is not defined
+  //baseURL: 'http://localhost:3333/api', // В разработке
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   withCredentials: true, // Важно для работы с CORS и передачи cookies
 });
@@ -20,7 +21,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Добавляем обработчик ошибок
@@ -29,7 +30,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       // Логируем ошибки для отладки
-      console.error('API Error:', error.response.status, error.response.data);
+      console.error("API Error:", error.response.status, error.response.data);
 
       // Если ошибка авторизации, можно выполнить дополнительные действия
       if (error.response.status === 401) {
@@ -38,13 +39,13 @@ api.interceptors.response.use(
       }
     } else if (error.request) {
       // Запрос был сделан, но ответ не получен
-      console.error('API Request Error:', error.request);
+      console.error("API Request Error:", error.request);
     } else {
       // Ошибка при настройке запроса
-      console.error('API Setup Error:', error.message);
+      console.error("API Setup Error:", error.message);
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

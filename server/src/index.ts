@@ -46,6 +46,11 @@ if (!fs.existsSync(uploadsPath)) {
 // Обслуживаем статические файлы из директории uploads
 app.use("/uploads", express.static(uploadsPath));
 
+// Обслуживаем статические файлы фронтенда из папки public
+const publicPath = path.join(__dirname, "../public");
+console.log("Public directory path:", publicPath);
+app.use(express.static(publicPath));
+
 // Routes
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
@@ -55,14 +60,40 @@ app.use("/api/admin", adminRoutes); // Старые маршруты для об
 app.use("/api/admin", adminNewRoutes); // Новые структурированные маршруты
 app.use("/api/uploads", uploadRoutes);
 
-// Root route
-app.get("/", (_, res) => {
-  res.send("Forsa Shop API is running");
+// SPA fallback - обрабатываем все остальные GET запросы
+app.get("/", (req, res) => {
+  const indexPath = path.join(publicPath, "index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res
+      .status(404)
+      .send("Frontend files not found. Make sure the app is built properly.");
+  }
+});
+
+// Fallback для всех остальных путей (SPA routing)
+app.use((req, res, next) => {
+  // Только для GET запросов и если это не API
+  if (req.method === "GET" && !req.path.startsWith("/api/")) {
+    const indexPath = path.join(publicPath, "index.html");
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      res
+        .status(404)
+        .send("Frontend files not found. Make sure the app is built properly.");
+    }
+  } else {
+    next();
+  }
 });
 
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Frontend available at: http://localhost:${PORT}`);
+  console.log(`API available at: http://localhost:${PORT}/api`);
 });
 
 export default app;
