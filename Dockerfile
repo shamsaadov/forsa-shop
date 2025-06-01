@@ -19,6 +19,9 @@ RUN npm run build
 FROM node:18-alpine AS builder-backend
 WORKDIR /app
 
+# Устанавливаем MySQL клиент для проверки подключения
+RUN apk add --no-cache mysql-client
+
 # копируем манифест сервера и код
 COPY server/package.json server/tsconfig.json ./
 COPY server/src/ ./src/
@@ -30,7 +33,11 @@ RUN npm run build
 # переносим готовый билд фронта в папку public для отдачи статики
 COPY --from=builder-frontend /app/dist ./public
 
+# копируем скрипт ожидания MySQL
+COPY wait-for-mysql.sh ./
+RUN chmod +x wait-for-mysql.sh
+
 # финальная конфигурация
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["node", "dist/index.js"]
+CMD ["./wait-for-mysql.sh"]
