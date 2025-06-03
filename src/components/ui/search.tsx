@@ -44,7 +44,7 @@ const SearchComponent: React.FC<SearchProps> = ({
     setLoading(true);
     try {
       const productsResponse = await api.get(
-        `/products?search=${encodeURIComponent(searchQuery)}&limit=5`,
+        `/produ1cts?search=${encodeURIComponent(searchQuery)}&limit=5`,
       );
       const products = productsResponse.data.map((product: any) => ({
         type: "product" as const,
@@ -57,7 +57,7 @@ const SearchComponent: React.FC<SearchProps> = ({
       }));
 
       const categoriesResponse = await api.get(
-        `/categories?search=${encodeURIComponent(searchQuery)}&limit=3`,
+        `/categor2ies?search=${encodeURIComponent(searchQuery)}&limit=3`,
       );
       const categories = categoriesResponse.data.map((category: any) => ({
         type: "category" as const,
