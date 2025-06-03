@@ -4,8 +4,8 @@ import { getToken, removeToken } from "@/utils/tokenUtils";
 console.log(import.meta.env);
 // Создаем экземпляр Axios
 const api = axios.create({
-  //baseURL: import.meta.env.VITE_BASE_URL || "/api", // Fallback to '/api' if env var is not defined
-  baseURL: "http://localhost:3333/api", // В разработке
+  baseURL: import.meta.env.VITE_BASE_URL || "/api", // Fallback to '/api' if env var is not defined
+  //baseURL: "http://localhost:3333/api", // В разработке
   headers: {
     "Content-Type": "application/json",
   },
