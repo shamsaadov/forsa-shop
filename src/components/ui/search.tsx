@@ -43,7 +43,6 @@ const SearchComponent: React.FC<SearchProps> = ({
 
     setLoading(true);
     try {
-      // Поиск товаров
       const productsResponse = await api.get(
         `/products?search=${encodeURIComponent(searchQuery)}&limit=5`,
       );
@@ -57,7 +56,6 @@ const SearchComponent: React.FC<SearchProps> = ({
         image_url: product.image_url,
       }));
 
-      // Поиск категорий
       const categoriesResponse = await api.get(
         `/categories?search=${encodeURIComponent(searchQuery)}&limit=3`,
       );
