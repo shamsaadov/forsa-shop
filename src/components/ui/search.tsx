@@ -59,7 +59,7 @@ const SearchComponent: React.FC<SearchProps> = ({
 
       // Поиск категорий
       const categoriesResponse = await api.get(
-        `/api/categories?search=${encodeURIComponent(searchQuery)}&limit=3`,
+        `/categories?search=${encodeURIComponent(searchQuery)}&limit=3`,
       );
       const categories = categoriesResponse.data.map((category: any) => ({
         type: "category" as const,
