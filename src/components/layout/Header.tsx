@@ -5,7 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { ShoppingCart, User, Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SearchComponent, { MobileSearch } from "@/components/ui/search";
-import logo from "../../../public/forsa-logo.svg";
+import logo from "/forsa-logo.svg";
 
 const Header: React.FC = () => {
   const { isAuthenticated, isAdmin, logout } = useAuth();
