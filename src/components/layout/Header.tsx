@@ -5,7 +5,6 @@ import { useCart } from "@/contexts/CartContext";
 import { ShoppingCart, User, Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SearchComponent, { MobileSearch } from "@/components/ui/search";
-import logo from "/forsa-logo.svg";
 
 const Header: React.FC = () => {
   const { isAuthenticated, isAdmin, logout } = useAuth();
@@ -26,7 +25,7 @@ const Header: React.FC = () => {
             to="/"
             className="text-2xl font-bold text-blue-600 flex items-center flex-shrink-0"
           >
-            <img src={logo} alt="logo" className="h-8 w-auto" />
+            <img src="/forsa-logo.svg" alt="logo" className="h-8 w-auto" />
           </Link>
 
           {/* Десктопное меню */}
