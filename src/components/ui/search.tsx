@@ -45,7 +45,7 @@ const SearchComponent: React.FC<SearchProps> = ({
     try {
       // Поиск товаров
       const productsResponse = await api.get(
-        `/api/products?search=${encodeURIComponent(searchQuery)}&limit=5`,
+        `/products?search=${encodeURIComponent(searchQuery)}&limit=5`,
       );
       const products = productsResponse.data.map((product: any) => ({
         type: "product" as const,
