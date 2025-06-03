@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart, User, Menu, X } from "lucide-react";
+import { ShoppingCart, User, Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import SearchComponent, { MobileSearch } from "@/components/ui/search";
 
 const Header: React.FC = () => {
   const { isAuthenticated, isAdmin, logout } = useAuth();
   const { items } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -17,17 +19,17 @@ const Header: React.FC = () => {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           {/* Логотип */}
           <Link
             to="/"
-            className="text-2xl font-bold text-blue-600 flex items-center"
+            className="text-2xl font-bold text-blue-600 flex items-center flex-shrink-0"
           >
             <span className="text-yellow-500">F</span>orsa
           </Link>
 
           {/* Десктопное меню */}
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden lg:flex space-x-6 flex-shrink-0">
             <Link
               to="/"
               className="text-gray-700 hover:text-blue-600 font-medium"
@@ -60,8 +62,22 @@ const Header: React.FC = () => {
             </Link>
           </nav>
 
+          {/* Поиск на десктопе */}
+          <div className="hidden md:block flex-1 max-w-lg mx-6">
+            <SearchComponent />
+          </div>
+
           {/* Правая часть */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-shrink-0">
+            {/* Поиск на мобильных */}
+            <button
+              className="md:hidden text-gray-700 hover:text-blue-600"
+              onClick={() => setMobileSearchOpen(true)}
+              aria-label="Поиск"
+            >
+              <Search className="h-6 w-6" />
+            </button>
+
             {/* Корзина */}
             <Link
               to="/cart"
@@ -104,7 +120,7 @@ const Header: React.FC = () => {
 
             {/* Кнопка мобильного меню */}
             <button
-              className="md:hidden text-gray-700 hover:text-blue-600"
+              className="lg:hidden text-gray-700 hover:text-blue-600"
               onClick={toggleMobileMenu}
               aria-label="Меню"
             >
@@ -119,7 +135,7 @@ const Header: React.FC = () => {
 
         {/* Мобильное меню */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pt-4 pb-2 space-y-2">
+          <nav className="lg:hidden pt-4 pb-2 space-y-2 border-t border-gray-100">
             <Link
               to="/"
               className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
@@ -157,7 +173,18 @@ const Header: React.FC = () => {
             </Link>
           </nav>
         )}
+
+        {/* Поиск на планшетах */}
+        <div className="md:block lg:hidden mt-4">
+          <SearchComponent />
+        </div>
       </div>
+
+      {/* Мобильный поиск */}
+      <MobileSearch
+        open={mobileSearchOpen}
+        onClose={() => setMobileSearchOpen(false)}
+      />
     </header>
   );
 };

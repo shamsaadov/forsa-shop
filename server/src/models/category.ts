@@ -20,6 +20,28 @@ const categoryModel = {
     return rows;
   },
 
+  // Поиск категорий
+  async searchCategories(
+    search?: string,
+    limit: number = 100,
+    offset: number = 0,
+  ): Promise<Category[]> {
+    let query = "SELECT * FROM categories WHERE 1=1";
+    const params: any[] = [];
+
+    if (search) {
+      query += " AND (name LIKE ? OR description LIKE ?)";
+      const searchParam = `%${search}%`;
+      params.push(searchParam, searchParam);
+    }
+
+    query += " ORDER BY name LIMIT ? OFFSET ?";
+    params.push(limit, offset);
+
+    const [rows] = await pool.query<Category[]>(query, params);
+    return rows;
+  },
+
   // Получить категорию по ID
   async getCategoryById(id: number | string): Promise<Category | null> {
     const [rows] = await pool.query<Category[]>(

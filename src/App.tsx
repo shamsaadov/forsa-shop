@@ -21,6 +21,7 @@ import LoginPage from "@/pages/client/LoginPage.tsx";
 import AboutPage from "@/pages/client/AboutPage.tsx";
 import NewsPage from "@/pages/client/NewsPage.tsx";
 import BlogPage from "@/pages/client/BlogPage.tsx";
+import SearchPage from "@/pages/client/SearchPage.tsx";
 
 // Админские страницы
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
@@ -144,6 +145,14 @@ const App: React.FC = () => {
                 element={
                   <Layout>
                     <LoginPage />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/search"
+                element={
+                  <Layout>
+                    <SearchPage />
                   </Layout>
                 }
               />
