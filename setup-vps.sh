@@ -65,8 +65,8 @@ After=docker.service
 Type=oneshot
 RemainAfterExit=true
 WorkingDirectory=/var/www/forsa-shop
-ExecStart=/usr/local/bin/docker-compose -f docker-compose.prod.yml up -d
-ExecStop=/usr/local/bin/docker-compose -f docker-compose.prod.yml down
+ExecStart=/usr/local/bin/docker-compose -f docker-compose.yml up -d
+ExecStop=/usr/local/bin/docker-compose -f docker-compose.yml down
 TimeoutStartSec=0
 
 [Install]
