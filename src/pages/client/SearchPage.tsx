@@ -35,7 +35,7 @@ const SearchPage: React.FC = () => {
       try {
         // Поиск товаров
         const productsResponse = await api.get(
-          `/api/products?search=${encodeURIComponent(query)}&limit=20`,
+          `/products?search=${encodeURIComponent(query)}&limit=20`,
         );
         const products = productsResponse.data.map((product: any) => ({
           type: "product" as const,
@@ -49,7 +49,7 @@ const SearchPage: React.FC = () => {
 
         // Поиск категорий
         const categoriesResponse = await api.get(
-          `/api/categories?search=${encodeURIComponent(query)}&limit=10`,
+          `/categories?search=${encodeURIComponent(query)}&limit=10`,
         );
         const categories = categoriesResponse.data.map((category: any) => ({
           type: "category" as const,
