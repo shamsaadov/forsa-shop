@@ -29,11 +29,6 @@ const CategoryPage: React.FC = () => {
 
   useEffect(() => {
     const fetchCategoryAndProducts = async () => {
-      if (!slug) {
-        setLoading(false);
-        return;
-      }
-
       try {
         setLoading(true);
 
