@@ -56,16 +56,16 @@ const CategoriesPage: React.FC = () => {
     fetchCategoryAndProducts();
   }, [slug]);
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-          <span className="ml-2 text-gray-600">Загрузка категории...</span>
-        </div>
-      </div>
-    );
-  }
+  //if (loading) {
+  //  return (
+  //    <div className="container mx-auto px-4 py-8">
+  //      <div className="flex items-center justify-center py-12">
+  //        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+  //        <span className="ml-2 text-gray-600">Загрузка категории...</span>
+  //      </div>
+  //    </div>
+  //  );
+  //}
 
   if (error || !category) {
     return (
