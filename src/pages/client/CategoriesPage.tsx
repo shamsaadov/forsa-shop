@@ -40,7 +40,7 @@ const CategoriesPage: React.FC = () => {
         // 2. Для каждой категории забираем её товары
         const productPromises = cats.map((cat) =>
           api
-            .get<Product[]>(`/categories/${cat.id}/products`)
+            .get<Product[]>(`/categories/${cat.slug}/products`)
             .then((res) => ({ id: cat.id, products: res.data }))
             .catch(() => ({ id: cat.id, products: [] as Product[] })),
         );
