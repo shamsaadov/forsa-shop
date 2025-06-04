@@ -24,7 +24,7 @@ const CategoriesPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [category, setCategory] = useState<Category | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const CategoriesPage: React.FC = () => {
       if (!slug) return;
 
       try {
-        setLoading(true);
+        //setLoading(true);
 
         // Получаем информацию о категории
         const categoryResponse = await api.get(`/categories/${slug}`);
@@ -49,23 +49,23 @@ const CategoriesPage: React.FC = () => {
           "Не удалось загрузить категорию. Пожалуйста, попробуйте позже.",
         );
       } finally {
-        setLoading(false);
+        //setLoading(false);
       }
     };
 
     fetchCategoryAndProducts();
   }, [slug]);
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-          <span className="ml-2 text-gray-600">Загрузка категории...</span>
-        </div>
-      </div>
-    );
-  }
+  //if (loading) {
+  //  return (
+  //    <div className="container mx-auto px-4 py-8">
+  //      <div className="flex items-center justify-center py-12">
+  //        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+  //        <span className="ml-2 text-gray-600">Загрузка категории...</span>
+  //      </div>
+  //    </div>
+  //  );
+  //}
 
   if (error || !category) {
     return (
