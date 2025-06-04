@@ -17,6 +17,7 @@ import uploadRoutes from "./routes/uploads";
 dotenv.config();
 
 const app = express();
+app.disable("etag");
 const PORT = 3000;
 
 // Настраиваем CORS с нужными опциями
