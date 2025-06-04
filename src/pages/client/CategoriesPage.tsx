@@ -29,7 +29,10 @@ const CategoriesPage: React.FC = () => {
 
   useEffect(() => {
     const fetchCategoryAndProducts = async () => {
-      if (!slug) return;
+      if (!slug) {
+        setLoading(false); // важный сброс, чтобы не висел спиннер
+        return;
+      }
 
       try {
         setLoading(true);
