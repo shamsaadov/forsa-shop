@@ -14,11 +14,27 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${MYSQL_ROOT_PASSWORD:-secret}",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   app:
     build: .
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       NODE_ENV: production
       DATABASE_URL: mysql://${MYSQL_USER:-forsa}:${MYSQL_PASSWORD:-secret}@db:3306/${MYSQL_DATABASE:-forsa}
@@ -30,7 +46,7 @@ services:
     volumes:
       - ./uploads:/app/uploads
     command: >
-      sh -c "sleep 45 && npm run init-db && node dist/index.js"
+      sh -c "sleep 10 && npm run init-db && node dist/index.js"
 
   nginx:
     image: nginx:alpine

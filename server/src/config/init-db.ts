@@ -24,18 +24,34 @@ const initDatabase = async () => {
   try {
     console.log("Initializing database...");
     await connection.query(
-      `CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``,
+      `CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\``
     );
     console.log(`Database ${process.env.DB_NAME} created or already exists`);
     await connection.query(`USE \`${process.env.DB_NAME}\``);
 
+    // Run main initialization script
     const sqlFilePath = path.join(__dirname, "init-db.sql");
     const sqlScript = fs.readFileSync(sqlFilePath, "utf8");
     console.log("SQL Script loaded:", sqlFilePath);
-
-    // Выполняем весь скрипт целиком
     await connection.query(sqlScript);
     console.log("Database initialized successfully");
+
+    // Run migrations
+    const migrationsDir = path.join(__dirname, "migrations");
+    if (fs.existsSync(migrationsDir)) {
+      const migrationFiles = fs
+        .readdirSync(migrationsDir)
+        .filter((file) => file.endsWith(".sql"))
+        .sort();
+
+      for (const file of migrationFiles) {
+        console.log(`Running migration: ${file}`);
+        const migrationPath = path.join(migrationsDir, file);
+        const migrationScript = fs.readFileSync(migrationPath, "utf8");
+        await connection.query(migrationScript);
+        console.log(`Migration ${file} completed successfully`);
+      }
+    }
   } catch (error) {
     console.error("Error initializing database:", error);
     throw error;
