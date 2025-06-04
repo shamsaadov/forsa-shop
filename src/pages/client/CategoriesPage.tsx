@@ -29,16 +29,16 @@ const CategoriesPage: React.FC = () => {
 
   useEffect(() => {
     const fetchCategoryAndProducts = async () => {
-      if (!slug) {
-        setLoading(false); // важный сброс, чтобы не висел спиннер
-        return;
-      }
+      //if (!slug) {
+      //  setLoading(false); // важный сброс, чтобы не висел спиннер
+      //  return;
+      //}
 
       try {
         setLoading(true);
 
         // Получаем информацию о категории
-        const categoryResponse = await api.get(`/categories/${slug}`);
+        const categoryResponse = await api.get(`/categories`);
         setCategory(categoryResponse.data);
 
         // Получаем товары категории
