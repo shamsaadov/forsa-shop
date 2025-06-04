@@ -56,18 +56,18 @@ const CategoriesPage: React.FC = () => {
     fetchCategoryAndProducts();
   }, [slug]);
 
-  //if (loading) {
-  //  return (
-  //    <div className="container mx-auto px-4 py-8">
-  //      <div className="flex items-center justify-center py-12">
-  //        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-  //        <span className="ml-2 text-gray-600">Загрузка категории...</span>
-  //      </div>
-  //    </div>
-  //  );
-  //}
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <span className="ml-2 text-gray-600">Загрузка категории...</span>
+        </div>
+      </div>
+    );
+  }
 
-  if (error || !category) {
+  if (!loading && (error || !category)) {
     return (
       <div className="container mx-auto px-4 py-8">
         <Link
@@ -98,21 +98,21 @@ const CategoriesPage: React.FC = () => {
 
         {/* Заголовок категории */}
         <div className="flex flex-col md:flex-row md:items-center gap-6">
-          {category.image_url && (
+          {category?.image_url && (
             <div className="hidden md:block flex-shrink-0">
               <img
-                src={category.image_url}
-                alt={category.name}
+                src={category?.image_url}
+                alt={category?.name}
                 className="w-24 h-24 rounded-lg object-cover"
               />
             </div>
           )}
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {category.name}
+              {category?.name}
             </h1>
-            {category.description && (
-              <p className="text-gray-600">{category.description}</p>
+            {category?.description && (
+              <p className="text-gray-600">{category?.description}</p>
             )}
           </div>
         </div>
