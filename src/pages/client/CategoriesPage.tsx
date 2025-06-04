@@ -70,23 +70,6 @@ const CategoriesPage: React.FC = () => {
     );
   }
 
-  if (!loading && (error || !category)) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <Link
-          to="/categories"
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          Назад к категориям
-        </Link>
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <p className="text-red-800">{error || "Категория не найдена"}</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Навигация */}
