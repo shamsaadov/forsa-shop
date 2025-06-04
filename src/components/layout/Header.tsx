@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart, User, Menu, X, Search } from "lucide-react";
+import {
+  ShoppingCart,
+  User,
+  Menu,
+  X,
+  Search,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SearchComponent, { MobileSearch } from "@/components/ui/search";
+import api from "@/services/api";
 import ForsaLogo from "@/icons/ForsaLogo.tsx";
 
 const Header: React.FC = () => {
@@ -12,10 +21,31 @@ const Header: React.FC = () => {
   const { items } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+    setCategoriesOpen(false); // Закрываем категории при закрытии меню
   };
+
+  const toggleCategories = () => {
+    setCategoriesOpen(!categoriesOpen);
+  };
+
+  // Загружаем категории при монтировании компонента
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get("/categories?limit=5");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -136,42 +166,87 @@ const Header: React.FC = () => {
 
         {/* Мобильное меню */}
         {mobileMenuOpen && (
-          <nav className="lg:hidden pt-4 pb-2 space-y-2 border-t border-gray-100">
-            <Link
-              to="/"
-              className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
-              onClick={toggleMobileMenu}
-            >
-              Главная
-            </Link>
-            <Link
-              to="/categories"
-              className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
-              onClick={toggleMobileMenu}
-            >
-              Каталог
-            </Link>
-            <Link
-              to="/about"
-              className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
-              onClick={toggleMobileMenu}
-            >
-              О нас
-            </Link>
-            <Link
-              to="/news"
-              className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
-              onClick={toggleMobileMenu}
-            >
-              Новости
-            </Link>
-            <Link
-              to="/blog"
-              className="block py-2 text-gray-700 hover:text-blue-600 font-medium"
-              onClick={toggleMobileMenu}
-            >
-              Блог
-            </Link>
+          <nav className="lg:hidden pt-4 pb-2 border-t border-gray-100 bg-white">
+            <div className="space-y-1">
+              <Link
+                to="/"
+                className="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-colors"
+                onClick={toggleMobileMenu}
+              >
+                Главная
+              </Link>
+
+              {/* Категории с выпадающим списком */}
+              <div>
+                <button
+                  onClick={toggleCategories}
+                  className="w-full flex items-center justify-between py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-colors"
+                >
+                  <span>Каталог</span>
+                  {categoriesOpen ? (
+                    <ChevronDown className="h-4 w-4" />
+                  ) : (
+                    <ChevronRight className="h-4 w-4" />
+                  )}
+                </button>
+
+                {/* Выпадающий список категорий */}
+                {categoriesOpen && (
+                  <div className="bg-gray-50 border-l-2 border-blue-200">
+                    {categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        to={`/categories/${category.slug}`}
+                        className="block py-2 px-8 text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                        onClick={toggleMobileMenu}
+                      >
+                        <div>
+                          <div className="font-medium text-sm">
+                            {category.name}
+                          </div>
+                          {category.description && (
+                            <div className="text-xs text-gray-500 mt-1 line-clamp-1">
+                              {category.description}
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+
+                    {/* Кнопка "Посмотреть все категории" */}
+                    <Link
+                      to="/categories"
+                      className="block py-3 px-8 text-blue-600 hover:text-blue-800 hover:bg-blue-50 font-medium text-sm transition-colors border-t border-gray-200"
+                      onClick={toggleMobileMenu}
+                    >
+                      Посмотреть все категории →
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              <Link
+                to="/about"
+                className="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-colors"
+                onClick={toggleMobileMenu}
+              >
+                О нас
+              </Link>
+              <Link
+                to="/news"
+                className="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-colors"
+                onClick={toggleMobileMenu}
+              >
+                Новости
+              </Link>
+              <Link
+                to="/blog"
+                className="block py-3 px-4 text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-colors"
+                onClick={toggleMobileMenu}
+              >
+                Блог
+              </Link>
+            </div>
           </nav>
         )}
 
