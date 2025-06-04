@@ -12,7 +12,6 @@ import {
   Phone,
   AlertCircle,
   ArrowLeft,
-  ChevronLeft,
   ChevronUp,
   ChevronDown,
 } from "lucide-react";

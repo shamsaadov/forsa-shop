@@ -38,12 +38,12 @@ const CategoryPage: React.FC = () => {
         setLoading(true);
 
         // Получаем информацию о категории по слагу
-        const categoryResponse = await api.get<Category>(`/categories/${slug}`);
+        const categoryResponse = await api.get<Category>(`/categories`);
         setCategory(categoryResponse.data);
 
         // Получаем товары категории по её id
         const productsResponse = await api.get<Product[]>(
-          `/categories/${categoryResponse.data.id}/products`,
+          `/products/category/${categoryResponse.data.id}`,
         );
         setProducts(productsResponse.data);
       } catch (err) {
