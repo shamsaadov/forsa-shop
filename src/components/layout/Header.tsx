@@ -74,6 +74,12 @@ const Header: React.FC = () => {
               Каталог
             </Link>
             <Link
+              to="/products"
+              className="text-gray-700 hover:text-blue-600 font-medium"
+            >
+              Все товары
+            </Link>
+            <Link
               to="/about"
               className="text-gray-700 hover:text-blue-600 font-medium"
             >
