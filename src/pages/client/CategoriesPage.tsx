@@ -40,14 +40,13 @@ const CategoriesPage: React.FC = () => {
         // 2. Для каждой категории забираем её товары
         const productPromises = cats.map((cat) =>
           api
-            .get<Product[]>(`/categories/${cat.slug}/products`)
+            .get<Product[]>(`/products/category/${cat.id}`)
             .then((res) => ({ id: cat.id, products: res.data }))
             .catch(() => ({ id: cat.id, products: [] as Product[] })),
         );
 
         const results = await Promise.all(productPromises);
 
-        // Формируем объект { [categoryId]: [products...] }
         const byCat: { [categoryId: number]: Product[] } = {};
         results.forEach(({ id, products }) => {
           byCat[id] = products;
