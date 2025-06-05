@@ -71,6 +71,14 @@ const AdminProductForm: React.FC = () => {
         if (isEditMode && id) {
           const productData = await getProductById(id);
 
+          const filledCategoryIds: string[] =
+            Array.isArray(productData.category_ids) &&
+            productData.category_ids.length > 0
+              ? productData.category_ids.map((cid: number) => String(cid))
+              : productData.category_id != null
+                ? [String(productData.category_id)]
+                : [];
+
           setFormData({
             id: productData.id,
             name: productData.name,
@@ -79,12 +87,12 @@ const AdminProductForm: React.FC = () => {
             image_url: productData.image_url || "",
             slug: productData.slug,
             stock: productData.stock,
-            category_ids: productData.categories || [],
+            category_ids: filledCategoryIds,
             specifications: productData.specifications || [],
             gallery_images: productData.gallery_images
               ? productData.gallery_images.map((img: any) => img.image_url)
               : [],
-            is_featured: productData.is_featured || false,
+            is_featured: Boolean(productData.is_featured),
           });
         }
 

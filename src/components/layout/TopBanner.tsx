@@ -279,7 +279,7 @@ const TopBanner: React.FC = () => {
             {/* Кнопка закрытия */}
             <button
               onClick={handleClose}
-              className="absolute top-2 right-2 text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 p-1.5 rounded-full backdrop-blur-sm border border-white/20"
+              className="absolute top-2 right-4 text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200 p-1.5 rounded-full backdrop-blur-sm border border-white/20"
               aria-label="Закрыть баннер"
             >
               <X className="h-4 w-4" />
