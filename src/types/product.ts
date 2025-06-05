@@ -22,6 +22,8 @@ export interface Product {
   price: number;
   image_url: string | null;
   category_id: number;
+  stock: number;
+  category_ids: string | null;
   category?: Category;
   specifications?: ProductSpecification[];
   is_featured: boolean;

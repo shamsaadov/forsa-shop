@@ -10,6 +10,8 @@ export interface Product extends RowDataPacket {
   price: number;
   image_url: string | null;
   category_id: number | string;
+  stock: number;
+  category_ids: string | null;
   is_featured: boolean;
   category?: Category;
   created_at: string;
@@ -37,11 +39,11 @@ const productModel = {
   // Получить все товары
   async getAllProducts(
     limit: number = 100,
-    offset: number = 0,
+    offset: number = 0
   ): Promise<Product[]> {
     const [rows] = await pool.query<Product[]>(
       "SELECT * FROM products ORDER BY created_at DESC LIMIT ? OFFSET ?",
-      [limit, offset],
+      [limit, offset]
     );
     return rows;
   },
@@ -50,7 +52,7 @@ const productModel = {
   async getFeaturedProducts(limit: number = 10): Promise<Product[]> {
     const [rows] = await pool.query<Product[]>(
       "SELECT * FROM products WHERE is_featured = TRUE ORDER BY created_at DESC LIMIT ?",
-      [limit],
+      [limit]
     );
     return rows;
   },
@@ -59,23 +61,23 @@ const productModel = {
   async addProductGalleryImage(
     productId: number,
     imageUrl: string,
-    isPrimary: boolean,
+    isPrimary: boolean
   ): Promise<number> {
     const [result] = await pool.query<ResultSetHeader>(
       `INSERT INTO product_gallery (product_id, image_url, is_primary)
      VALUES (?, ?, ?)`,
-      [productId, imageUrl, isPrimary ? 1 : 0],
+      [productId, imageUrl, isPrimary ? 1 : 0]
     );
     return result.insertId;
   },
 
   // Удалить все изображения из галереи товара
   async deleteProductGalleryImages(
-    productId: number | string,
+    productId: number | string
   ): Promise<boolean> {
     const [result] = await pool.query<OkPacket>(
       `DELETE FROM product_gallery WHERE product_id = ?`,
-      [productId],
+      [productId]
     );
     return result.affectedRows > 0;
   },
@@ -84,7 +86,7 @@ const productModel = {
   async deleteProductGalleryImage(imageId: number | string): Promise<boolean> {
     const [result] = await pool.query<OkPacket>(
       `DELETE FROM product_gallery WHERE id = ?`,
-      [imageId],
+      [imageId]
     );
     return result.affectedRows > 0;
   },
@@ -96,7 +98,7 @@ const productModel = {
     minPrice?: number,
     maxPrice?: number,
     limit: number = 100,
-    offset: number = 0,
+    offset: number = 0
   ): Promise<Product[]> {
     let query = "SELECT * FROM products WHERE 1=1";
     const params: any[] = [];
@@ -133,7 +135,7 @@ const productModel = {
   async getProductById(id: number | string): Promise<Product | null> {
     const [rows] = await pool.query<Product[]>(
       "SELECT * FROM products WHERE id = ?",
-      [id],
+      [id]
     );
 
     if (rows.length === 0) {
@@ -146,7 +148,7 @@ const productModel = {
     if (product.category_id) {
       const [categoryRows] = await pool.query<Category[]>(
         "SELECT * FROM categories WHERE id = ?",
-        [product.category_id],
+        [product.category_id]
       );
 
       if (categoryRows.length > 0) {
@@ -157,13 +159,13 @@ const productModel = {
     // Получаем характеристики товара
     const [specifications] = await pool.query<ProductSpecification[]>(
       "SELECT * FROM product_specifications WHERE product_id = ?",
-      [id],
+      [id]
     );
 
     // Получаем галерею изображений
     const [galleryImages] = await pool.query<ProductGalleryImage[]>(
       "SELECT * FROM product_gallery WHERE product_id = ? ORDER BY is_primary DESC",
-      [id],
+      [id]
     );
 
     product.specifications = specifications;
@@ -176,7 +178,7 @@ const productModel = {
   async getProductBySlug(slug: string): Promise<Product | null> {
     const [rows] = await pool.query<Product[]>(
       "SELECT * FROM products WHERE slug = ?",
-      [slug],
+      [slug]
     );
 
     if (rows.length === 0) {
@@ -189,7 +191,7 @@ const productModel = {
     if (product.category_id) {
       const [categoryRows] = await pool.query<Category[]>(
         "SELECT * FROM categories WHERE id = ?",
-        [product.category_id],
+        [product.category_id]
       );
 
       if (categoryRows.length > 0) {
@@ -200,13 +202,13 @@ const productModel = {
     // Получаем характеристики товара
     const [specifications] = await pool.query<ProductSpecification[]>(
       "SELECT * FROM product_specifications WHERE product_id = ?",
-      [product.id],
+      [product.id]
     );
 
     // Получаем галерею изображений
     const [galleryImages] = await pool.query<ProductGalleryImage[]>(
       "SELECT * FROM product_gallery WHERE product_id = ? ORDER BY is_primary DESC",
-      [product.id],
+      [product.id]
     );
 
     product.specifications = specifications;
@@ -220,7 +222,7 @@ const productModel = {
     categoryId: number | string,
     limit: number = 100,
     offset: number = 0,
-    excludeProductId?: number,
+    excludeProductId?: number
   ): Promise<Product[]> {
     let query = "SELECT * FROM products WHERE category_id = ?";
     const params: any[] = [categoryId];
@@ -251,7 +253,7 @@ const productModel = {
         productData.stock,
         productData.category_ids,
         productData.is_featured || false,
-      ],
+      ]
     );
 
     return result.insertId;
@@ -268,7 +270,7 @@ const productModel = {
       image_url?: string | null;
       category_id?: number;
       is_featured?: boolean;
-    },
+    }
   ): Promise<boolean> {
     const fields: string[] = [];
     const values: any[] = [];
@@ -289,7 +291,7 @@ const productModel = {
 
     const [result] = await pool.query<OkPacket>(
       `UPDATE products SET ${fields.join(", ")} WHERE id = ?`,
-      values,
+      values
     );
 
     return result.affectedRows > 0;
@@ -299,7 +301,7 @@ const productModel = {
   async deleteProduct(id: number | string): Promise<boolean> {
     const [result] = await pool.query<OkPacket>(
       "DELETE FROM products WHERE id = ?",
-      [id],
+      [id]
     );
 
     return result.affectedRows > 0;
@@ -311,11 +313,11 @@ const productModel = {
     specData: {
       name: string;
       value: string;
-    },
+    }
   ): Promise<number> {
     const [result] = await pool.query<ResultSetHeader>(
       "INSERT INTO product_specifications (product_id, name, value) VALUES (?, ?, ?)",
-      [productId, specData.name, specData.value],
+      [productId, specData.name, specData.value]
     );
 
     return result.insertId;
@@ -323,11 +325,11 @@ const productModel = {
 
   // Получить спецификации товара
   async getProductSpecifications(
-    productId: number,
+    productId: number
   ): Promise<ProductSpecification[]> {
     const [rows] = await pool.query<ProductSpecification[]>(
       "SELECT * FROM product_specifications WHERE product_id = ?",
-      [productId],
+      [productId]
     );
 
     return rows;
@@ -339,7 +341,7 @@ const productModel = {
     specData: {
       name?: string;
       value?: string;
-    },
+    }
   ): Promise<boolean> {
     const fields: string[] = [];
     const values: any[] = [];
@@ -360,7 +362,7 @@ const productModel = {
 
     const [result] = await pool.query<OkPacket>(
       `UPDATE product_specifications SET ${fields.join(", ")} WHERE id = ?`,
-      values,
+      values
     );
 
     return result.affectedRows > 0;
@@ -370,7 +372,7 @@ const productModel = {
   async deleteProductSpecification(specId: number): Promise<boolean> {
     const [result] = await pool.query<OkPacket>(
       "DELETE FROM product_specifications WHERE id = ?",
-      [specId],
+      [specId]
     );
 
     return result.affectedRows > 0;
@@ -380,7 +382,7 @@ const productModel = {
   async deleteProductSpecifications(productId: number): Promise<boolean> {
     const [result] = await pool.query<OkPacket>(
       "DELETE FROM product_specifications WHERE product_id = ?",
-      [productId],
+      [productId]
     );
 
     return result.affectedRows > 0;
