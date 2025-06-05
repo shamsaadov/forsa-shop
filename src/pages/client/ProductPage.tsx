@@ -60,7 +60,7 @@ const ProductPage: React.FC = () => {
 
       try {
         const response = await api.get(
-          `/categories/${product.category_id}/products?limit=4&exclude=${product.id}`,
+          `/products/category/${product.category_id}?limit=4&exclude=${product.id}`,
         );
         setRelatedProducts(response.data);
       } catch (err) {
@@ -430,13 +430,13 @@ const ProductPage: React.FC = () => {
             onValueChange={setActiveTab}
           >
             <TabsList className="w-full border-b border-gray-200 grid grid-cols-3">
-              <TabsTrigger value="description" className="py-3 text-base">
+              <TabsTrigger value="description" className=" text-base">
                 Описание
               </TabsTrigger>
-              <TabsTrigger value="specifications" className="py-3 text-base">
+              <TabsTrigger value="specifications" className="text-base">
                 Характеристики
               </TabsTrigger>
-              <TabsTrigger value="delivery" className="py-3 text-base">
+              <TabsTrigger value="delivery" className=" text-base">
                 Доставка и оплата
               </TabsTrigger>
             </TabsList>

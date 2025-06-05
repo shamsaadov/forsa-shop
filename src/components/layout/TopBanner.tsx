@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import { X, Phone, Clock, Star, MapPin, Zap } from "lucide-react";
 
 const TopBanner: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(() => {
-    // Проверяем localStorage при инициализации
-    const saved = localStorage.getItem("topBannerVisible");
-    return saved !== "false"; // По умолчанию показываем, если ключа нет
-  });
+  const [isVisible, setIsVisible] = useState(true);
   const [isAnimated, setIsAnimated] = useState(false);
 
   useEffect(() => {
@@ -19,8 +15,6 @@ const TopBanner: React.FC = () => {
 
   const handleClose = () => {
     setIsVisible(false);
-    // Сохраняем состояние в localStorage
-    localStorage.setItem("topBannerVisible", "false");
   };
 
   // Определяем контент баннера в зависимости от времени
