@@ -48,6 +48,7 @@ router.post("/", async (req: any, res: any) => {
       category_ids,
       specifications,
       stock,
+      is_featured,
     } = req.body;
 
     // Базовая валидация
@@ -67,6 +68,7 @@ router.post("/", async (req: any, res: any) => {
       image_url: image_url || null,
       category_id: parseInt(category_ids[0]),
       stock: stock,
+      is_featured: Boolean(is_featured),
     });
 
     // Если есть спецификации, добавляем их
@@ -120,6 +122,7 @@ router.put("/:id", async (req: any, res: any) => {
       image_url,
       category_ids,
       specifications,
+      is_featured,
     } = req.body;
 
     // Проверяем, существует ли товар
@@ -136,6 +139,7 @@ router.put("/:id", async (req: any, res: any) => {
       price: parseFloat(price),
       image_url,
       category_id: parseInt(category_ids[0]), // Берем первую категорию как основную
+      is_featured: Boolean(is_featured),
     });
 
     // Если есть спецификации, обновляем их

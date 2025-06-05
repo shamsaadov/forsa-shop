@@ -21,6 +21,7 @@ export interface Product {
   created_at: string;
   updated_at: string;
   categories?: string[];
+  is_featured?: boolean;
 }
 
 // Тип элемента корзины

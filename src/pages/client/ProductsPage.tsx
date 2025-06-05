@@ -9,6 +9,7 @@ import {
   SortAsc,
   SortDesc,
   X,
+  Star,
 } from "lucide-react";
 import api from "@/services/api";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,7 @@ interface Product {
   image_url: string | null;
   category_id: number;
   category_name?: string;
+  is_featured: boolean;
 }
 
 interface Category {
@@ -386,6 +388,12 @@ const ProductsPage: React.FC = () => {
                     <Badge variant="outline" className="text-xs">
                       {product.category_name}
                     </Badge>
+                    {product.is_featured && (
+                      <Badge className="bg-yellow-500 text-yellow-900 border-yellow-400 text-xs">
+                        <Star className="h-3 w-3 mr-1 fill-current" />
+                        Товар недели
+                      </Badge>
+                    )}
                   </div>
                   <h3 className="font-medium text-gray-900 mb-2 hover:text-blue-600 transition-colors line-clamp-2">
                     {product.name}

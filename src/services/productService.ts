@@ -11,6 +11,7 @@ interface ProductFormData {
   category_ids: string[];
   specifications?: ProductSpecification[];
   gallery_images?: string[];
+  is_featured?: boolean;
 }
 
 // Получить товары по заданной категории
@@ -24,6 +25,12 @@ export const getProductsByCategory = async (categoryId: string) => {
 // Получить все товары
 export const getProducts = async () => {
   const response = await api.get("/products");
+  return response.data;
+};
+
+// Получить товары недели
+export const getFeaturedProducts = async (limit: number = 10) => {
+  const response = await api.get(`/products/featured?limit=${limit}`);
   return response.data;
 };
 

@@ -10,6 +10,7 @@ export interface Product extends RowDataPacket {
   price: number;
   image_url: string | null;
   category_id: number | string;
+  is_featured: boolean;
   category?: Category;
   created_at: string;
   updated_at: string;
@@ -41,6 +42,15 @@ const productModel = {
     const [rows] = await pool.query<Product[]>(
       "SELECT * FROM products ORDER BY created_at DESC LIMIT ? OFFSET ?",
       [limit, offset],
+    );
+    return rows;
+  },
+
+  // Получить товары недели
+  async getFeaturedProducts(limit: number = 10): Promise<Product[]> {
+    const [rows] = await pool.query<Product[]>(
+      "SELECT * FROM products WHERE is_featured = TRUE ORDER BY created_at DESC LIMIT ?",
+      [limit],
     );
     return rows;
   },
@@ -230,7 +240,7 @@ const productModel = {
   // Создать новый товар
   async createProduct(productData: any): Promise<number> {
     const [result] = await pool.query<ResultSetHeader>(
-      "INSERT INTO products (name, description, slug, price, image_url, category_id, stock, category_ids) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO products (name, description, slug, price, image_url, category_id, stock, category_ids, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         productData.name,
         productData.description,
@@ -240,6 +250,7 @@ const productModel = {
         productData.category_id,
         productData.stock,
         productData.category_ids,
+        productData.is_featured || false,
       ],
     );
 
@@ -256,8 +267,7 @@ const productModel = {
       price?: number;
       image_url?: string | null;
       category_id?: number;
-      stock?: any;
-      category_ids?: any;
+      is_featured?: boolean;
     },
   ): Promise<boolean> {
     const fields: string[] = [];

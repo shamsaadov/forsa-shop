@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Edit2, Trash2, Eye, Search } from "lucide-react";
+import { Plus, Edit2, Trash2, Eye, Search, Star, Badge } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,6 +26,8 @@ const AdminProductsPage: React.FC = () => {
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  const featuredCount = products.filter((p) => p.is_featured).length;
 
   // Форматирование цены
   const formatPrice = (price: number) => {
@@ -139,6 +141,31 @@ const AdminProductsPage: React.FC = () => {
           </Button>
         </Link>
       </div>
+
+      {/* ─── Блок с базовой статистикой ─── */}
+      <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="bg-white shadow rounded-lg p-4 flex items-center">
+          <div className="bg-blue-100 p-2 rounded-full">
+            <Plus className="h-6 w-6 text-blue-600" />
+          </div>
+          <div className="ml-4">
+            <p className="text-sm text-gray-600">Всего товаров</p>
+            <p className="text-2xl font-bold text-gray-900">
+              {products.length}
+            </p>
+          </div>
+        </div>
+        <div className="bg-white shadow rounded-lg p-4 flex items-center">
+          <div className="bg-yellow-100 p-2 rounded-full">
+            <Star className="h-6 w-6 text-yellow-500" />
+          </div>
+          <div className="ml-4">
+            <p className="text-sm text-gray-600">Товары недели</p>
+            <p className="text-2xl font-bold text-gray-900">{featuredCount}</p>
+          </div>
+        </div>
+      </div>
+      {/* ───────────────────────────────────── */}
 
       {/* Поиск и фильтрация */}
       <div className="mb-6 flex flex-col md:flex-row gap-4">
@@ -256,7 +283,7 @@ const AdminProductsPage: React.FC = () => {
                 <tr key={product.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="h-10 w-10 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
+                      <div className="relative h-10 w-10 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
                         <img
                           src={
                             product.image_url ||
@@ -265,6 +292,14 @@ const AdminProductsPage: React.FC = () => {
                           alt={product.name}
                           className="h-full w-full object-cover"
                         />
+                        {product.is_featured && (
+                          <div className="absolute top-0 right-0">
+                            <Badge className="bg-yellow-500 text-yellow-900 border-yellow-400 text-xs p-0.5 rounded">
+                              <Star className="h-3 w-3 mr-1 fill-current" />
+                              Нед.
+                            </Badge>
+                          </div>
+                        )}
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">
@@ -278,6 +313,7 @@ const AdminProductsPage: React.FC = () => {
                       </div>
                     </div>
                   </td>
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
                       {/* Рендер категорий */}

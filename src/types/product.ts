@@ -24,6 +24,7 @@ export interface Product {
   category_id: number;
   category?: Category;
   specifications?: ProductSpecification[];
+  is_featured: boolean;
   gallery_images?: ProductGalleryImage[];
   created_at: string;
   updated_at: string;

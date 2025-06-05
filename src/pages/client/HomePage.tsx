@@ -47,35 +47,35 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      {/* Hero section */}
-      <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Преобразите ваше пространство с натяжными потолками Forsa
-            </h1>
-            <p className="text-lg md:text-xl mb-8 text-blue-100">
-              Качественные и долговечные натяжные потолки для любого интерьера.
-              Широкий выбор материалов, цветов и фактур.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/categories">
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold px-6 py-3 rounded-lg">
-                  Просмотреть каталог
-                </Button>
-              </Link>
-              <Link to="/about">
-                <Button
-                  variant="outline"
-                  className="bg-transparent border-white text-white hover:bg-white/10 px-6 py-3 rounded-lg"
-                >
-                  О компании
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/*/!* Hero section *!/*/}
+      {/*<div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white">*/}
+      {/*  <div className="container mx-auto px-4 py-16 md:py-24">*/}
+      {/*    <div className="max-w-3xl">*/}
+      {/*      <h1 className="text-4xl md:text-5xl font-bold mb-4">*/}
+      {/*        Преобразите ваше пространство с натяжными потолками Forsa*/}
+      {/*      </h1>*/}
+      {/*      <p className="text-lg md:text-xl mb-8 text-blue-100">*/}
+      {/*        Качественные и долговечные натяжные потолки для любого интерьера.*/}
+      {/*        Широкий выбор материалов, цветов и фактур.*/}
+      {/*      </p>*/}
+      {/*      <div className="flex flex-col sm:flex-row gap-4">*/}
+      {/*        <Link to="/categories">*/}
+      {/*          <Button className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold px-6 py-3 rounded-lg">*/}
+      {/*            Просмотреть каталог*/}
+      {/*          </Button>*/}
+      {/*        </Link>*/}
+      {/*        <Link to="/about">*/}
+      {/*          <Button*/}
+      {/*            variant="outline"*/}
+      {/*            className="bg-transparent border-white text-white hover:bg-white/10 px-6 py-3 rounded-lg"*/}
+      {/*          >*/}
+      {/*            О компании*/}
+      {/*          </Button>*/}
+      {/*        </Link>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       {/* Slider with promotions */}
       <div className="container mx-auto px-4 py-8">

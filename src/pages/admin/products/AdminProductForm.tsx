@@ -27,6 +27,7 @@ interface FormData {
   category_ids: string[];
   specifications: ProductSpecification[];
   gallery_images: string[];
+  is_featured: boolean;
 }
 
 const AdminProductForm: React.FC = () => {
@@ -45,6 +46,7 @@ const AdminProductForm: React.FC = () => {
     category_ids: [],
     specifications: [],
     gallery_images: [],
+    is_featured: false,
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -82,6 +84,7 @@ const AdminProductForm: React.FC = () => {
             gallery_images: productData.gallery_images
               ? productData.gallery_images.map((img: any) => img.image_url)
               : [],
+            is_featured: productData.is_featured || false,
           });
         }
 
@@ -443,6 +446,31 @@ const AdminProductForm: React.FC = () => {
                       </p>
                     )}
                   </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="is_featured"
+                      checked={formData.is_featured}
+                      onCheckedChange={(checked) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          is_featured: checked as boolean,
+                        }))
+                      }
+                      disabled={isSubmitting}
+                    />
+                    <label
+                      htmlFor="is_featured"
+                      className="text-sm font-medium text-gray-700"
+                    >
+                      Товар недели
+                    </label>
+                  </div>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Товар будет отображаться в слайдере на главной странице
+                  </p>
                 </div>
 
                 <div className="space-y-4">
