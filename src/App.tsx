@@ -67,8 +67,8 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
-          <ScrollToTop />
           <Router>
+            <ScrollToTop />
             <Routes>
               {/* Маршруты клиентской части */}
               <Route
