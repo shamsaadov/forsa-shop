@@ -32,32 +32,10 @@ import AdminProductForm from "@/pages/admin/products/AdminProductForm";
 import AdminOrdersPage from "@/pages/admin/orders/AdminOrdersPage";
 import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
 import AdminUserForm from "@/pages/admin/users/AdminUserForm";
+import ScrollToTop from "@/components/layout/ScrollToTop.tsx";
 
 // Создаем клиент для React Query
 const queryClient = new QueryClient();
-
-// Компонент для защищенных маршрутов (требующих авторизации)
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const { isAuthenticated, isLoading } = useAuth();
-
-  // Пока проверяем авторизацию, показываем загрузку
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  // Если пользователь не авторизован, перенаправляем на страницу входа
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-
-  return <>{children}</>;
-};
 
 // Компонент для защищенных админских маршрутов
 const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -89,6 +67,7 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <CartProvider>
+          <ScrollToTop />
           <Router>
             <Routes>
               {/* Маршруты клиентской части */}

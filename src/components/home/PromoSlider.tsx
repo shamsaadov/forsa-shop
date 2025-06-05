@@ -21,7 +21,7 @@ const PromoSlider: React.FC = () => {
     const fetchFeaturedProducts = async () => {
       try {
         setLoading(true);
-        const products = await getFeaturedProducts(5); // Получаем до 5 товаров
+        const products = await getFeaturedProducts(5);
         setFeaturedProducts(products);
       } catch (err) {
         console.error("Error fetching featured products:", err);
@@ -104,7 +104,6 @@ const PromoSlider: React.FC = () => {
         {slides.map((item) => (
           <SwiperSlide key={item.id}>
             {"slug" in item ? (
-              // Товар недели
               <div
                 className="relative h-[400px] md:h-[500px] bg-center bg-cover"
                 style={{
@@ -115,11 +114,6 @@ const PromoSlider: React.FC = () => {
                 <div className="absolute inset-0 flex items-center">
                   <div className="container mx-auto px-6 md:px-12">
                     <div className="max-w-lg">
-                      <div className="mb-3">
-                        <Badge variant="secondary" className="mb-2">
-                          {"Натяжные потолки"}
-                        </Badge>
-                      </div>
                       <h2 className="text-3xl md:text-4xl font-bold mb-3 text-white">
                         {item.name}
                       </h2>
@@ -143,7 +137,7 @@ const PromoSlider: React.FC = () => {
                         <Link to={`/products/${item.slug}`}>
                           <Button
                             variant="outline"
-                            className="border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center"
+                            className="border-white text-blue-600 hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg flex items-center"
                           >
                             <ShoppingBag className="mr-2 h-5 w-5" />
                             Заказать

@@ -251,7 +251,6 @@ const CartPage: React.FC = () => {
                 <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
                   <tr>
                     <th className="py-3 px-4 text-left">Товар</th>
-                    <th className="py-3 px-4 text-right">Цена</th>
                     <th className="py-3 px-4 text-center">Количество</th>
                     <th className="py-3 px-4 text-right">Сумма</th>
                     <th className="py-3 px-4 text-center">Действия</th>
@@ -280,9 +279,6 @@ const CartPage: React.FC = () => {
                             {item.product.name}
                           </Link>
                         </div>
-                      </td>
-                      <td className="py-4 px-4 text-right font-medium">
-                        {item.product.price?.toLocaleString()} ₽/м²
                       </td>
                       <td className="py-4 px-4">
                         <div className="flex items-center justify-center space-x-2">
