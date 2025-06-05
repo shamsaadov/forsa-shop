@@ -269,6 +269,8 @@ const productModel = {
       price?: number;
       image_url?: string | null;
       category_id?: number;
+      stock?: number;
+      category_ids?: string | null;
       is_featured?: boolean;
     }
   ): Promise<boolean> {
