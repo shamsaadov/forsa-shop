@@ -20,8 +20,22 @@ PREPARE alterIfNotExists FROM @preparedStatement;
 EXECUTE alterIfNotExists;
 DEALLOCATE PREPARE alterIfNotExists;
 
--- Создаем индекс только если он еще не существует
-CREATE INDEX IF NOT EXISTS idx_products_is_featured ON products(is_featured);
+-- Проверяем существование индекса перед созданием
+SET @indexname = "idx_products_is_featured";
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
+    WHERE 
+      (TABLE_SCHEMA = @dbname)
+      AND (TABLE_NAME = @tablename)
+      AND (INDEX_NAME = @indexname)
+  ) > 0,
+  "SELECT 1",
+  "CREATE INDEX idx_products_is_featured ON products(is_featured)"
+));
+PREPARE createIndexIfNotExists FROM @preparedStatement;
+EXECUTE createIndexIfNotExists;
+DEALLOCATE PREPARE createIndexIfNotExists;
 
 -- Обновляем комментарий к полю
 ALTER TABLE products MODIFY COLUMN is_featured BOOLEAN DEFAULT FALSE COMMENT 'Товар недели (отображается в слайдере на главной)';
