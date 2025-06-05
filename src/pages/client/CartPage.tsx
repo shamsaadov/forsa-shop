@@ -252,7 +252,6 @@ const CartPage: React.FC = () => {
                   <tr>
                     <th className="py-3 px-4 text-left">Товар</th>
                     <th className="py-3 px-4 text-center">Количество</th>
-                    <th className="py-3 px-4 text-right">Сумма</th>
                     <th className="py-3 px-4 text-center">Действия</th>
                   </tr>
                 </thead>
@@ -304,10 +303,6 @@ const CartPage: React.FC = () => {
                             <PlusCircle className="h-5 w-5" />
                           </button>
                         </div>
-                      </td>
-                      <td className="py-4 px-4 text-right font-semibold">
-                        {(item.product.price * item.quantity)?.toLocaleString()}{" "}
-                        ₽
                       </td>
                       <td className="py-4 px-4 text-center">
                         <button
