@@ -8,6 +8,7 @@ import {
   Instagram,
   Twitter,
 } from "lucide-react";
+import ForsaLogo from "@/icons/ForsaLogo.tsx";
 
 const Footer: React.FC = () => {
   return (
@@ -16,10 +17,12 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* О компании */}
           <div>
-            <h3 className="text-xl font-bold mb-4">
-              <span className="text-yellow-500">F</span>
-              <span className="text-blue-500">orsa</span>
-            </h3>
+            <Link
+              to="/"
+              className="text-2xl font-bold text-blue-600 flex items-center flex-shrink-0"
+            >
+              <ForsaLogo />
+            </Link>
             <p className="text-gray-400 mb-4">
               Мы предлагаем высококачественные натяжные потолки для любых
               помещений. Украсьте свой дом с нашими стильными и долговечными
