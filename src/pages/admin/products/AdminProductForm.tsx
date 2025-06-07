@@ -53,7 +53,7 @@ const AdminProductForm: React.FC = () => {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
-    {}
+    {},
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -114,7 +114,7 @@ const AdminProductForm: React.FC = () => {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
 
@@ -174,7 +174,7 @@ const AdminProductForm: React.FC = () => {
   const handleSpecificationChange = (
     index: number,
     field: "name" | "value",
-    value: string
+    value: string,
   ) => {
     setFormData((prev) => {
       const newSpecifications = [...prev.specifications];
@@ -284,7 +284,7 @@ const AdminProductForm: React.FC = () => {
     // Проверка на заполненность спецификаций
     if (
       formData.specifications.some(
-        (spec) => !spec.name.trim() || !spec.value.trim()
+        (spec) => !spec.name.trim() || !spec.value.trim(),
       )
     ) {
       newErrors.specifications = "Все поля характеристик должны быть заполнены";
@@ -323,8 +323,6 @@ const AdminProductForm: React.FC = () => {
       setIsSubmitting(false);
     }
   };
-
-  console.log(formData);
 
   return (
     <AdminLayout>
@@ -466,7 +464,7 @@ const AdminProductForm: React.FC = () => {
                       htmlFor="stock"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      Количество на складе
+                      Количество на складе-1
                     </label>
                     <Input
                       id="stock"
@@ -621,12 +619,12 @@ const AdminProductForm: React.FC = () => {
                             <Checkbox
                               id={`category-${category.id}`}
                               checked={formData.category_ids.includes(
-                                category.id
+                                category.id,
                               )}
                               onCheckedChange={(checked) =>
                                 handleCategoryChange(
                                   category.id,
-                                  checked as boolean
+                                  checked as boolean,
                                 )
                               }
                               disabled={isSubmitting}
@@ -688,7 +686,7 @@ const AdminProductForm: React.FC = () => {
                               handleSpecificationChange(
                                 index,
                                 "name",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             disabled={isSubmitting}
@@ -702,7 +700,7 @@ const AdminProductForm: React.FC = () => {
                               handleSpecificationChange(
                                 index,
                                 "value",
-                                e.target.value
+                                e.target.value,
                               )
                             }
                             disabled={isSubmitting}
