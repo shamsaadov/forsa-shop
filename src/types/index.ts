@@ -22,6 +22,7 @@ export interface Product {
   updated_at: string;
   categories?: string[];
   is_featured?: boolean;
+  price_type?: any;
 }
 
 // Тип элемента корзины

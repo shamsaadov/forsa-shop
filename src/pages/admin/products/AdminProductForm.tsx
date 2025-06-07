@@ -324,6 +324,8 @@ const AdminProductForm: React.FC = () => {
     }
   };
 
+  console.log(formData);
+
   return (
     <AdminLayout>
       <div className="mb-6">
@@ -335,7 +337,7 @@ const AdminProductForm: React.FC = () => {
           Назад к товарам
         </Link>
         <h1 className="text-3xl font-bold">
-          {isEditMode ? "Редактиро23вание товара" : "Новый т1овар"}
+          {isEditMode ? "Редактирование товара" : "Новый товар"}
         </h1>
       </div>
 
@@ -464,7 +466,7 @@ const AdminProductForm: React.FC = () => {
                       htmlFor="stock"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      Количество на складе-1
+                      Количество на складе
                     </label>
                     <Input
                       id="stock"
