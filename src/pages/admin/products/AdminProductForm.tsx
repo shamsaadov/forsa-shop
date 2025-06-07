@@ -335,7 +335,7 @@ const AdminProductForm: React.FC = () => {
           Назад к товарам
         </Link>
         <h1 className="text-3xl font-bold">
-          {isEditMode ? "Редактирование товара" : "Новый товар"}
+          {isEditMode ? "Редактиро23вание товара" : "Новый т1овар"}
         </h1>
       </div>
 
