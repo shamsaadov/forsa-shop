@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS products (
   description TEXT,
   slug VARCHAR(255) NOT NULL UNIQUE,
   price DECIMAL(10, 2) NOT NULL,
+  price_type ENUM('square_meter', 'linear_meter', 'piece') NOT NULL DEFAULT 'square_meter',
   image_url VARCHAR(255),
   category_id INT,
   stock INT DEFAULT 0,
@@ -107,16 +108,16 @@ SELECT 'Многоуровневые потолки', 'Сложные много
 WHERE NOT EXISTS (SELECT 1 FROM categories WHERE slug = 'multilevel');
 
 -- Примеры товаров
-INSERT INTO products (name, description, slug, price, image_url, category_id)
-SELECT 'Глянцевый потолок Classic', 'Классический глянцевый потолок с высокой степенью отражения', 'glossy-classic', 900, 'https://images.unsplash.com/photo-1604147706283-d7119b5b822c?q=80&w=800&auto=format&fit=crop', (SELECT id FROM categories WHERE slug = 'glossy')
+INSERT INTO products (name, description, slug, price, price_type, image_url, category_id)
+SELECT 'Глянцевый потолок Classic', 'Классический глянцевый потолок с высокой степенью отражения', 'glossy-classic', 900, 'square_meter', 'https://images.unsplash.com/photo-1604147706283-d7119b5b822c?q=80&w=800&auto=format&fit=crop', (SELECT id FROM categories WHERE slug = 'glossy')
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE slug = 'glossy-classic');
 
-INSERT INTO products (name, description, slug, price, image_url, category_id)
-SELECT 'Матовый потолок Elegance', 'Элегантный матовый потолок с антибликовым покрытием', 'matte-elegance', 800, 'https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?q=80&w=800&auto=format&fit=crop', (SELECT id FROM categories WHERE slug = 'matte')
+INSERT INTO products (name, description, slug, price, price_type, image_url, category_id)
+SELECT 'Матовый потолок Elegance', 'Элегантный матовый потолок с антибликовым покрытием', 'matte-elegance', 800, 'square_meter', 'https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?q=80&w=800&auto=format&fit=crop', (SELECT id FROM categories WHERE slug = 'matte')
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE slug = 'matte-elegance');
 
-INSERT INTO products (name, description, slug, price, image_url, category_id)
-SELECT 'Многоуровневый потолок Premium', 'Многоуровневая конструкция с подсветкой и плавными переходами', 'multilevel-premium', 1500, 'https://images.unsplash.com/photo-1532323544230-7191fd51bc1b?q=80&w=800&auto=format&fit=crop', (SELECT id FROM categories WHERE slug = 'multilevel')
+INSERT INTO products (name, description, slug, price, price_type, image_url, category_id)
+SELECT 'Многоуровневый потолок Premium', 'Многоуровневая конструкция с подсветкой и плавными переходами', 'multilevel-premium', 1500, 'square_meter', 'https://images.unsplash.com/photo-1532323544230-7191fd51bc1b?q=80&w=800&auto=format&fit=crop', (SELECT id FROM categories WHERE slug = 'multilevel')
 WHERE NOT EXISTS (SELECT 1 FROM products WHERE slug = 'multilevel-premium');
 
 -- Пример спецификаций для товаров

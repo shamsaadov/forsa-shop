@@ -21,6 +21,7 @@ interface Product {
   description: string | null;
   slug: string;
   price: number;
+  price_type: "square_meter" | "linear_meter" | "piece";
   image_url: string | null;
   category_id: number;
   category_name?: string;
@@ -66,13 +67,13 @@ const ProductsPage: React.FC = () => {
         const productsWithCategories = productsResponse.data.map(
           (product: Product) => {
             const category = categoriesResponse.data.find(
-              (cat: Category) => cat.id === product.category_id,
+              (cat: Category) => cat.id === product.category_id
             );
             return {
               ...product,
               category_name: category?.name || "Без категории",
             };
-          },
+          }
         );
 
         setProducts(productsWithCategories);
@@ -101,14 +102,14 @@ const ProductsPage: React.FC = () => {
           (product.description &&
             product.description.toLowerCase().includes(query)) ||
           (product.category_name &&
-            product.category_name.toLowerCase().includes(query)),
+            product.category_name.toLowerCase().includes(query))
       );
     }
 
     // Фильтрация по категории
     if (selectedCategory !== null) {
       filtered = filtered.filter(
-        (product) => product.category_id === selectedCategory,
+        (product) => product.category_id === selectedCategory
       );
     }
 

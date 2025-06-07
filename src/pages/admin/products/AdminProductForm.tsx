@@ -21,6 +21,7 @@ interface FormData {
   name: string;
   description: string;
   price: number;
+  price_type: "square_meter" | "linear_meter" | "piece";
   image_url: string;
   slug: string;
   stock: number;
@@ -40,6 +41,7 @@ const AdminProductForm: React.FC = () => {
     name: "",
     description: "",
     price: 0,
+    price_type: "square_meter",
     image_url: "",
     slug: "",
     stock: 0,
@@ -51,7 +53,7 @@ const AdminProductForm: React.FC = () => {
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
-    {},
+    {}
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -84,6 +86,7 @@ const AdminProductForm: React.FC = () => {
             name: productData.name,
             description: productData.description || "",
             price: productData.price,
+            price_type: productData.price_type,
             image_url: productData.image_url || "",
             slug: productData.slug,
             stock: productData.stock,
@@ -109,7 +112,9 @@ const AdminProductForm: React.FC = () => {
 
   // Обработчик изменения текстовых полей формы
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
 
@@ -169,7 +174,7 @@ const AdminProductForm: React.FC = () => {
   const handleSpecificationChange = (
     index: number,
     field: "name" | "value",
-    value: string,
+    value: string
   ) => {
     setFormData((prev) => {
       const newSpecifications = [...prev.specifications];
@@ -279,7 +284,7 @@ const AdminProductForm: React.FC = () => {
     // Проверка на заполненность спецификаций
     if (
       formData.specifications.some(
-        (spec) => !spec.name.trim() || !spec.value.trim(),
+        (spec) => !spec.name.trim() || !spec.value.trim()
       )
     ) {
       newErrors.specifications = "Все поля характеристик должны быть заполнены";
@@ -424,9 +429,35 @@ const AdminProductForm: React.FC = () => {
                         {errors.price}
                       </p>
                     )}
-                    <p className="mt-1 text-sm text-gray-500">
-                      Цена за один квадратный метр
-                    </p>
+                  </div>
+
+                  {/* Тип цены */}
+                  <div>
+                    <label
+                      htmlFor="price_type"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Тип цены *
+                    </label>
+                    <select
+                      id="price_type"
+                      name="price_type"
+                      value={formData.price_type}
+                      onChange={handleChange}
+                      className={`w-full rounded-md border ${
+                        errors.price_type ? "border-red-500" : "border-gray-300"
+                      } px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                      disabled={isSubmitting}
+                    >
+                      <option value="square_meter">За квадратный метр</option>
+                      <option value="linear_meter">За погонный метр</option>
+                      <option value="piece">За штуку</option>
+                    </select>
+                    {errors.price_type && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors.price_type}
+                      </p>
+                    )}
                   </div>
 
                   {/* Количество на складе */}
@@ -590,12 +621,12 @@ const AdminProductForm: React.FC = () => {
                             <Checkbox
                               id={`category-${category.id}`}
                               checked={formData.category_ids.includes(
-                                category.id,
+                                category.id
                               )}
                               onCheckedChange={(checked) =>
                                 handleCategoryChange(
                                   category.id,
-                                  checked as boolean,
+                                  checked as boolean
                                 )
                               }
                               disabled={isSubmitting}
@@ -657,7 +688,7 @@ const AdminProductForm: React.FC = () => {
                               handleSpecificationChange(
                                 index,
                                 "name",
-                                e.target.value,
+                                e.target.value
                               )
                             }
                             disabled={isSubmitting}
@@ -671,7 +702,7 @@ const AdminProductForm: React.FC = () => {
                               handleSpecificationChange(
                                 index,
                                 "value",
-                                e.target.value,
+                                e.target.value
                               )
                             }
                             disabled={isSubmitting}

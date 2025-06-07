@@ -5,6 +5,7 @@ interface ProductFormData {
   name: string;
   description: string;
   price: number;
+  price_type: "square_meter" | "linear_meter" | "piece";
   image_url: string;
   slug: string;
   stock: number;
@@ -54,7 +55,7 @@ export const createProduct = async (productData: ProductFormData) => {
 // Обновить существующий товар
 export const updateProduct = async (
   id: string,
-  productData: ProductFormData,
+  productData: ProductFormData
 ) => {
   const response = await api.put(`/admin/products/${id}`, productData);
   return response.data;

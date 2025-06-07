@@ -20,6 +20,7 @@ export interface Product {
   description: string | null;
   slug: string;
   price: number;
+  price_type: "square_meter" | "linear_meter" | "piece";
   image_url: string | null;
   category_id: number;
   stock: number;

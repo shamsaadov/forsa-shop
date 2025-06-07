@@ -8,6 +8,7 @@ export interface Product extends RowDataPacket {
   description: string | null;
   slug: string;
   price: number;
+  price_type: "square_meter" | "linear_meter" | "piece";
   image_url: string | null;
   category_id: number | string;
   stock: number;
@@ -242,12 +243,13 @@ const productModel = {
   // Создать новый товар
   async createProduct(productData: any): Promise<number> {
     const [result] = await pool.query<ResultSetHeader>(
-      "INSERT INTO products (name, description, slug, price, image_url, category_id, stock, category_ids, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO products (name, description, slug, price, price_type, image_url, category_id, stock, category_ids, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         productData.name,
         productData.description,
         productData.slug,
         productData.price,
+        productData.price_type || "square_meter",
         productData.image_url,
         productData.category_id,
         productData.stock,
@@ -267,6 +269,7 @@ const productModel = {
       description?: string | null;
       slug?: string;
       price?: number;
+      price_type?: "square_meter" | "linear_meter" | "piece";
       image_url?: string | null;
       category_id?: number;
       stock?: number;
