@@ -52,10 +52,10 @@ services:
     depends_on:
       - app
     volumes:
-      - ./nginx:/etc/nginx:ro
-        - ./dist:/usr/share/nginx/html:ro
-        - ./uploads:/usr/share/nginx/html/uploads:ro
-        - /etc/letsencrypt:/etc/letsencrypt:ro
+          - ./nginx:/etc/nginx:ro
+          - ./dist:/usr/share/nginx/html:ro
+          - ./uploads:/usr/share/nginx/html/uploads:ro
+          - /etc/letsencrypt:/etc/letsencrypt:ro
     command: >
       sh -c "nginx -g 'daemon off;'"
 
