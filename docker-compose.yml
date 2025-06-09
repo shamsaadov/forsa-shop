@@ -27,7 +27,7 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
-      - uploads-data:/app/public/uploads
+      - uploads-data:/app/public/uploads:rw
     environment:
       - NODE_ENV=development
       - PORT=3000
@@ -62,3 +62,8 @@ services:
 volumes:
   db-data:
   uploads-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/uploads
