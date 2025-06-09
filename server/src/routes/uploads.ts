@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 const router = express.Router();
 
 // Настройка директории для сохранения файлов - используем абсолютный путь
-const uploadDir = path.join(__dirname, "../../../uploads");
+const uploadDir = path.join(__dirname, "../../../public/uploads");
 console.log("Upload storage directory:", uploadDir);
 
 // Создаем директорию, если она не существует
@@ -55,7 +55,7 @@ const storage = multer.diskStorage({
 const fileFilter = (
   req: any,
   file: Express.Multer.File,
-  cb: multer.FileFilterCallback,
+  cb: multer.FileFilterCallback
 ) => {
   // Разрешенные типы файлов (только изображения)
   const allowedMimeTypes = [
@@ -70,8 +70,8 @@ const fileFilter = (
   } else {
     cb(
       new Error(
-        "Недопустимый тип файла. Разрешены только изображения (JPEG, PNG, GIF, WEBP)",
-      ),
+        "Недопустимый тип файла. Разрешены только изображения (JPEG, PNG, GIF, WEBP)"
+      )
     );
   }
 };
@@ -121,7 +121,7 @@ router.post(
       console.error("Upload error:", error);
       res.status(500).json({ message: "Ошибка при загрузке файла" });
     }
-  },
+  }
 );
 
 // Маршрут для загрузки нескольких изображений
@@ -161,7 +161,7 @@ router.post(
       console.error("Upload error:", error);
       res.status(500).json({ message: "Ошибка при загрузке файлов" });
     }
-  },
+  }
 );
 
 // Маршрут для удаления файла
@@ -195,7 +195,7 @@ router.delete(
       console.error("File deletion error:", error);
       res.status(500).json({ message: "Ошибка при удалении файла" });
     }
-  },
+  }
 );
 
 // Поддержка старого маршрута для обратной совместимости
