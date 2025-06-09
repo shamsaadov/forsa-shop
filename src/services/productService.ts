@@ -1,5 +1,5 @@
 import api from "./api";
-import { ProductSpecification } from "@/types/product.ts";
+import { Product, ProductSpecification } from "@/types/product.ts";
 
 interface ProductFormData {
   name: string;
@@ -30,9 +30,20 @@ export const getProducts = async () => {
 };
 
 // Получить товары недели
-export const getFeaturedProducts = async (limit: number = 10) => {
-  const response = await api.get(`/products/featured?limit=${limit}`);
-  return response.data;
+export const getFeaturedProducts = async (
+  limit: number = 10
+): Promise<Product[]> => {
+  try {
+    const response = await api.get(`/products/featured?limit=${limit}`);
+    if (!response.data || !Array.isArray(response.data)) {
+      console.error("Invalid API response format:", response.data);
+      return [];
+    }
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching featured products:", error);
+    return [];
+  }
 };
 
 // Получить товар по ID

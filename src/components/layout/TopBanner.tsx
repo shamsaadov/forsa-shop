@@ -64,6 +64,7 @@ const TopBanner: React.FC = () => {
               d="M0,50 Q250,20 500,50 T1000,50 V100 H0 Z"
               fill="white"
               opacity="0.1"
+              clipPath="none"
             >
               <animate
                 attributeName="d"

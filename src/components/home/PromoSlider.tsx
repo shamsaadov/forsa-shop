@@ -21,11 +21,19 @@ const PromoSlider: React.FC = () => {
     const fetchFeaturedProducts = async () => {
       try {
         setLoading(true);
-        const products = await getFeaturedProducts(5);
-        setFeaturedProducts(products);
+        const response = await getFeaturedProducts(5);
+        // Проверяем, что response является массивом
+        if (Array.isArray(response)) {
+          setFeaturedProducts(response);
+        } else {
+          console.error("API response is not an array:", response);
+          setError("Неверный формат данных от сервера");
+          setFeaturedProducts([]);
+        }
       } catch (err) {
         console.error("Error fetching featured products:", err);
         setError("Не удалось загрузить товары недели");
+        setFeaturedProducts([]);
       } finally {
         setLoading(false);
       }
@@ -75,11 +83,13 @@ const PromoSlider: React.FC = () => {
 
   // Используем товары недели, если есть, иначе fallback слайды
   const slides =
-    featuredProducts.length > 0 ? featuredProducts : fallbackSlides;
+    Array.isArray(featuredProducts) && featuredProducts.length > 0
+      ? featuredProducts
+      : fallbackSlides;
 
   return (
     <div className="relative">
-      {featuredProducts.length > 0 && (
+      {Array.isArray(featuredProducts) && featuredProducts.length > 0 && (
         <div className="absolute top-4 left-4 z-20">
           <Badge className="bg-yellow-500 text-yellow-900 border-yellow-400 shadow-lg">
             <Star className="h-3 w-3 mr-1 fill-current" />
