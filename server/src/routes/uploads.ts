@@ -11,23 +11,25 @@ const router = express.Router();
 const uploadDir = path.join(__dirname, "../../../public/uploads");
 console.log("Upload storage directory:", uploadDir);
 
-// Создаем директорию, если она не существует
-if (!fs.existsSync(uploadDir)) {
-  console.log("Creating uploads directory...");
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+// Создаем все необходимые директории
+const directories = [
+  uploadDir,
+  path.join(uploadDir, "categories"),
+  path.join(uploadDir, "products"),
+];
+
+directories.forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    console.log(`Creating directory: ${dir}`);
+    fs.mkdirSync(dir, { recursive: true });
+    // Устанавливаем права доступа
+    fs.chmodSync(dir, 0o755);
+  }
+});
 
 // Создаем подпапки для разных типов изображений
 const categoryImagesDir = path.join(uploadDir, "categories");
 const productImagesDir = path.join(uploadDir, "products");
-
-if (!fs.existsSync(categoryImagesDir)) {
-  fs.mkdirSync(categoryImagesDir, { recursive: true });
-}
-
-if (!fs.existsSync(productImagesDir)) {
-  fs.mkdirSync(productImagesDir, { recursive: true });
-}
 
 // Настройка multer для загрузки изображений
 const storage = multer.diskStorage({
