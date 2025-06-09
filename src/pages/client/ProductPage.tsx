@@ -135,6 +135,15 @@ const ProductPage: React.FC = () => {
     return images;
   };
 
+  const quantityLabelMap: Record<string, string> = {
+    square_meter: "Количество (м²)",
+    linear_meter: "Длина (м)",
+    piece: "Количество (шт.)",
+  };
+  const quantityLabel = product
+    ? quantityLabelMap[product.price_type]
+    : "Количество";
+
   // Получение характеристик товара
   const getSpecifications = () => {
     if (!product) return [];
@@ -321,7 +330,7 @@ const ProductPage: React.FC = () => {
             {/* Выбор количества и добавление в корзину */}
             <div className="mb-8">
               <div className="flex items-center mb-4">
-                <span className="text-gray-700 mr-4">Количество (м²):</span>
+                <span className="text-gray-700 mr-4">{quantityLabel}:</span>
                 <div className="flex border border-gray-300 rounded-md">
                   <button
                     onClick={decrementQuantity}
@@ -430,7 +439,7 @@ const ProductPage: React.FC = () => {
             onValueChange={setActiveTab}
           >
             <TabsList className="w-full border-b border-gray-200 grid grid-cols-3">
-              <TabsTrigger value="description" className=" text-base">
+              <TabsTrigger value="description" className="text-base">
                 Описание
               </TabsTrigger>
               <TabsTrigger value="specifications" className="text-base">
