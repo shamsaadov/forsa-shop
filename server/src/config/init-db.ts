@@ -52,6 +52,26 @@ const initDatabase = async () => {
         console.log(`Migration ${file} completed successfully`);
       }
     }
+
+    // Create uploads directory if it doesn't exist
+    const uploadsDir = path.join(__dirname, "../../public/uploads");
+    if (!fs.existsSync(uploadsDir)) {
+      console.log("Creating uploads directory...");
+      fs.mkdirSync(uploadsDir, { recursive: true });
+      // Set permissions to 755
+      fs.chmodSync(uploadsDir, "755");
+    }
+    console.log("Uploads directory path:", uploadsDir);
+
+    // Create public directory if it doesn't exist
+    const publicDir = path.join(__dirname, "../../public");
+    if (!fs.existsSync(publicDir)) {
+      console.log("Creating public directory...");
+      fs.mkdirSync(publicDir, { recursive: true });
+      // Set permissions to 755
+      fs.chmodSync(publicDir, "755");
+    }
+    console.log("Public directory path:", publicDir);
   } catch (error) {
     console.error("Error initializing database:", error);
     throw error;
