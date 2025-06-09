@@ -91,7 +91,7 @@ router.post("/", async (req: any, res: any) => {
           await productModel.addProductGalleryImage(
             productId,
             imageUrl,
-            i === 0,
+            i === 0
           ); // Первое изображение делаем главным
         }
       }
@@ -119,6 +119,7 @@ router.put("/:id", async (req: any, res: any) => {
       description,
       slug,
       price,
+      price_type,
       image_url,
       category_ids,
       specifications,
@@ -137,6 +138,7 @@ router.put("/:id", async (req: any, res: any) => {
       description,
       slug,
       price: parseFloat(price),
+      price_type,
       image_url,
       category_id: parseInt(category_ids[0]), // Берем первую категорию как основную
       is_featured: Boolean(is_featured),
@@ -171,7 +173,7 @@ router.put("/:id", async (req: any, res: any) => {
             await productModel.addProductGalleryImage(
               productId,
               imageUrl,
-              i === 0,
+              i === 0
             ); // Первое изображение делаем главным
           }
         }
