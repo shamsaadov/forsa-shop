@@ -4,7 +4,7 @@ import { getToken, removeToken } from "@/utils/tokenUtils";
 console.log(import.meta.env);
 // Создаем экземпляр Axios
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL || "/api", // Fallback to '/api' if env var is not defined
+  baseURL: "/api", // Всегда используем относительный путь /api
   //baseURL: "http://localhost:3333/api", // В разработке
   headers: {
     "Content-Type": "application/json",
@@ -21,7 +21,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
 
 // Добавляем обработчик ошибок
@@ -45,7 +45,7 @@ api.interceptors.response.use(
       console.error("API Setup Error:", error.message);
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 export default api;
