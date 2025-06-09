@@ -18,11 +18,16 @@ dotenv.config();
 
 const app = express();
 app.disable("etag");
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Настраиваем CORS с нужными опциями
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://127.0.0.1:5173"], // Разрешаем запросы с этих источников
+  origin: [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost",
+    "http://localhost:80",
+  ], // Разрешаем запросы с этих источников
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   credentials: true, // Разрешаем передачу cookies и авторизационных заголовков
@@ -33,6 +38,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
+  });
+});
 
 // Настройка для статических файлов - абсолютный путь к папке uploads
 const uploadsPath = path.join(__dirname, "../../uploads");
