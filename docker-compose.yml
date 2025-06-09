@@ -27,7 +27,7 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
-      - uploads-data:/app/public/uploads:rw
+      - ./uploads:/app/public/uploads:rw
     environment:
       - NODE_ENV=development
       - PORT=3000
@@ -55,15 +55,9 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./dist:/usr/share/nginx/html:ro
-      - uploads-data:/usr/share/nginx/html/uploads:ro
+      - ./uploads:/usr/share/nginx/html/uploads:ro
     command: >
       sh -c "nginx -g 'daemon off;'"
 
 volumes:
   db-data:
-  uploads-data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ${PWD}/uploads
