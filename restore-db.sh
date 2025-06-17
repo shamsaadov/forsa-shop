@@ -16,9 +16,30 @@ docker-compose stop app
 # Ждем несколько секунд
 sleep 3
 
+# Определяем правильный пароль root для MySQL
+echo "🔍 Определение пароля root для MySQL..."
+ROOT_PASSWORD=""
+
+# Список возможных паролей
+POSSIBLE_PASSWORDS=("secret" "LoremIpsum_95" "YourSecureRootPassword" "your_secure_root_password")
+
+for password in "${POSSIBLE_PASSWORDS[@]}"; do
+    if docker-compose exec -T db mysql -u root -p$password -e "SELECT 1;" >/dev/null 2>&1; then
+        ROOT_PASSWORD=$password
+        echo "✅ Найден рабочий пароль root: $password"
+        break
+    fi
+done
+
+if [ -z "$ROOT_PASSWORD" ]; then
+    echo "❌ Ошибка: не удалось найти рабочий пароль root для MySQL!"
+    echo "Проверьте логи БД: docker-compose logs db"
+    exit 1
+fi
+
 # Создаем базу данных, если её нет
 echo "🗄️ Создание базы данных..."
-docker-compose exec -T db mysql -u root -psecret -e "CREATE DATABASE IF NOT EXISTS forsa_shop; GRANT ALL PRIVILEGES ON forsa_shop.* TO 'app_user'@'%'; FLUSH PRIVILEGES;"
+docker-compose exec -T db mysql -u root -p$ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS forsa_shop; GRANT ALL PRIVILEGES ON forsa_shop.* TO 'app_user'@'%'; FLUSH PRIVILEGES;"
 
 # Запускаем инициализацию базы данных
 echo "🚀 Инициализация структуры и данных..."

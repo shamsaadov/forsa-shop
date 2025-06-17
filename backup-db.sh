@@ -19,9 +19,30 @@ if ! docker-compose ps db | grep -q "Up"; then
     exit 1
 fi
 
+# Определяем правильный пароль root для MySQL
+echo "🔍 Определение пароля root для MySQL..."
+ROOT_PASSWORD=""
+
+# Список возможных паролей
+POSSIBLE_PASSWORDS=("secret" "LoremIpsum_95" "YourSecureRootPassword" "your_secure_root_password")
+
+for password in "${POSSIBLE_PASSWORDS[@]}"; do
+    if docker-compose exec -T db mysql -u root -p$password -e "SELECT 1;" >/dev/null 2>&1; then
+        ROOT_PASSWORD=$password
+        echo "✅ Найден рабочий пароль root: $password"
+        break
+    fi
+done
+
+if [ -z "$ROOT_PASSWORD" ]; then
+    echo "❌ Ошибка: не удалось найти рабочий пароль root для MySQL!"
+    echo "Проверьте логи БД: docker-compose logs db"
+    exit 1
+fi
+
 # Проверяем, что база данных существует
 echo "🔍 Проверка существования базы данных..."
-if ! docker-compose exec -T db mysql -u root -psecret -e "USE forsa_shop; SELECT 1;" > /dev/null 2>&1; then
+if ! docker-compose exec -T db mysql -u root -p$ROOT_PASSWORD -e "USE forsa_shop; SELECT 1;" > /dev/null 2>&1; then
     echo "❌ Ошибка: база данных forsa_shop не существует!"
     echo "Запустите: bash restore-db.sh"
     exit 1
@@ -29,7 +50,7 @@ fi
 
 # Создаем бэкап
 echo "💾 Создание бэкапа: $BACKUP_FILE"
-if docker-compose exec -T db mysqldump -u root -psecret --single-transaction --routines --triggers forsa_shop > "$BACKUP_FILE"; then
+if docker-compose exec -T db mysqldump -u root -p$ROOT_PASSWORD --single-transaction --routines --triggers forsa_shop > "$BACKUP_FILE"; then
     
     # Проверяем, что бэкап не пустой
     if [ -s "$BACKUP_FILE" ] && grep -q "CREATE TABLE" "$BACKUP_FILE"; then
