@@ -26,24 +26,38 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh -o StrictHostKeyChecking=no root@79.174.81.6 '
-            cd /var/www/forsa-shop || git clone https://github.com/${{ github.repository }} /var/www/forsa-shop
+            set -eux
+
+            # 1) Клонируем или обновляем репозиторий
+            cd /var/www/forsa-shop \
+              || git clone https://github.com/${GITHUB_REPOSITORY}.git /var/www/forsa-shop
             cd /var/www/forsa-shop
-            git fetch origin
+            git fetch --tags origin
             git reset --hard origin/main
-            
-            # Останавливаем старые контейнеры
+
+            # 2) Чистим старые сборки
+            rm -rf dist node_modules
+
+            # 3) Устанавливаем зависимости и собираем фронт
+            npm install
+            npm run build
+
+            # 4) Останавливаем старые контейнеры
             docker-compose down || true
-            
-            # Удаляем старые образы для освобождения места
-            docker system prune -f || true
-            
-            # Собираем и запускаем новые контейнеры
-            docker-compose up --build -d
-            
-            # Ждем запуска всех сервисов
-            sleep 45
-            
-            # Проверяем статус
+
+            # 5) Опционально подтягиваем новые образы
+            docker-compose pull || true
+
+            # 6) Пересобираем только сервис app без кеша
+            docker-compose build --no-cache app
+
+            # 7) Запускаем в фоне
+            docker-compose up -d
+
+            # 8) Ждём прогрева сервисов
+            sleep 30
+
+            # 9) Диагностика: статус и последние логи
             docker-compose ps
             
             # Показываем логи для диагностики
