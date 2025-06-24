@@ -21,11 +21,11 @@ jobs:
 
       - name: Add VPS to known hosts
         run: |
-          ssh-keyscan -H 80.64.24.240 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 79.174.81.6 >> ~/.ssh/known_hosts
 
       - name: Deploy to VPS
         run: |
-          ssh -o StrictHostKeyChecking=no root@80.64.24.240 '
+          ssh -o StrictHostKeyChecking=no root@79.174.81.6 '
             cd /var/www/forsa-shop || git clone https://github.com/${{ github.repository }} /var/www/forsa-shop
             cd /var/www/forsa-shop
             git fetch origin
