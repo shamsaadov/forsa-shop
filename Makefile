@@ -7,14 +7,14 @@ MYSQL_CONTAINER = forsa-shop-db-1
 DB_NAME = $(MYSQL_DATABASE)
 DB_USER = root
 DB_PASS = $(MYSQL_ROOT_PASSWORD)
-SQL_FILE = ./scripts/forsa_shop_insert_fixed.sql
+SQL_FILE = ./scripts/forsa_shop_insert_utf8.sql
 
 .PHONY: import dump restart-db
 
 # Импорт SQL-дампа
 import:
-	docker exec -i $(MYSQL_CONTAINER) mysql -u $(DB_USER) -p$(DB_PASS) $(DB_NAME) < $(SQL_FILE)
-	@echo "✅ Импорт завершён"
+	docker exec -i $(MYSQL_CONTAINER) mysql -u $(DB_USER) -p$(DB_PASS) --default-character-set=utf8mb4 $(DB_NAME) < $(SQL_FILE)
+	@echo "✅ Импорт завершён с кодировкой utf8mb4"
 
 # Сделать дамп базы в файл
 dump:
