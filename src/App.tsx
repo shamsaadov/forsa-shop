@@ -64,6 +64,7 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 const App: React.FC = () => {
+  alert("Здарова");
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
