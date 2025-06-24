@@ -2,10 +2,9 @@
 export const saveToken = (token: string): void => {
   if (token) {
     try {
-      localStorage.setItem('token', token);
-      console.log('Token saved successfully');
+      localStorage.setItem("token", token);
     } catch (error) {
-      console.error('Error saving token to localStorage:', error);
+      console.error("Error saving token to localStorage:", error);
     }
   }
 };
@@ -13,9 +12,9 @@ export const saveToken = (token: string): void => {
 // Получить токен из localStorage
 export const getToken = (): string | null => {
   try {
-    return localStorage.getItem('token');
+    return localStorage.getItem("token");
   } catch (error) {
-    console.error('Error getting token from localStorage:', error);
+    console.error("Error getting token from localStorage:", error);
     return null;
   }
 };
@@ -23,8 +22,8 @@ export const getToken = (): string | null => {
 // Удалить токен из localStorage
 export const removeToken = (): void => {
   try {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
   } catch (error) {
-    console.error('Error removing token from localStorage:', error);
+    console.error("Error removing token from localStorage:", error);
   }
 };
