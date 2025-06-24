@@ -3,7 +3,7 @@ include .env
 export $(shell sed 's/=.*//' .env)
 
 # Настройки
-MYSQL_CONTAINER = db
+MYSQL_CONTAINER = forsa-shop-db-1
 DB_NAME = $(MYSQL_DATABASE)
 DB_USER = root
 DB_PASS = $(MYSQL_ROOT_PASSWORD)
