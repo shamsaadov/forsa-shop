@@ -21,6 +21,7 @@ import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImageCarousel from "@/components/ui/image-carousel";
+import { toast } from "react-toastify";
 
 const ProductPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -92,7 +93,7 @@ const ProductPage: React.FC = () => {
       );
 
       // Уведомление или другая логика после добавления в корзину
-      alert("Товар добавлен в корзину!");
+      toast("Товар добавлен в корзину!");
     }
   };
 
@@ -404,29 +405,7 @@ const ProductPage: React.FC = () => {
                     Монтаж от 1 дня
                   </span>
                 </li>
-                <li className="flex items-start">
-                  <div className="flex-shrink-0 mt-0.5">
-                    <div className="bg-green-100 text-green-600 p-1 rounded-full">
-                      <Check className="h-4 w-4" />
-                    </div>
-                  </div>
-                  <span className="ml-2 text-sm text-gray-600">
-                    Гарантия 20 лет
-                  </span>
-                </li>
               </ul>
-            </div>
-
-            {/* Дополнительные действия */}
-            <div className="flex items-center space-x-4 text-gray-500">
-              <button className="flex items-center hover:text-blue-600">
-                <Heart className="h-5 w-5 mr-1" />
-                <span className="text-sm">В избранное</span>
-              </button>
-              <button className="flex items-center hover:text-blue-600">
-                <Share2 className="h-5 w-5 mr-1" />
-                <span className="text-sm">Поделиться</span>
-              </button>
             </div>
           </div>
         </div>

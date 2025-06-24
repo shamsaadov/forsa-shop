@@ -33,6 +33,7 @@ import AdminOrdersPage from "@/pages/admin/orders/AdminOrdersPage";
 import AdminUsersPage from "@/pages/admin/users/AdminUsersPage";
 import AdminUserForm from "@/pages/admin/users/AdminUserForm";
 import ScrollToTop from "@/components/layout/ScrollToTop.tsx";
+import { ToastContainer } from "react-toastify";
 
 // Создаем клиент для React Query
 const queryClient = new QueryClient();
@@ -270,6 +271,7 @@ const App: React.FC = () => {
                 }
               />
             </Routes>
+            <ToastContainer />
           </Router>
         </CartProvider>
       </AuthProvider>
