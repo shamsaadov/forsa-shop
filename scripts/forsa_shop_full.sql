@@ -1,8 +1,10 @@
 -- SQL Dump for categories, products and specifications
 /*!50503 SET NAMES utf8mb4 */;
-DELETE FROM product_specifications;
-DELETE FROM products;
-DELETE FROM categories;
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE product_specifications;
+TRUNCATE TABLE products;
+TRUNCATE TABLE categories;
+SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO categories (id, name, slug, created_at, updated_at) VALUES
 (1, 'Профили', 'profili', '2025-07-01 06:50:48', '2025-07-01 06:50:48'),
