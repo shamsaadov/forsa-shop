@@ -35,7 +35,7 @@ const SearchPage: React.FC = () => {
       try {
         // Поиск товаров
         const productsResponse = await api.get(
-          `/products?search=${encodeURIComponent(query)}&limit=20`,
+          `/products?search=${encodeURIComponent(query)}&limit=20`
         );
         const products = productsResponse.data.map((product: any) => ({
           type: "product" as const,
@@ -49,7 +49,7 @@ const SearchPage: React.FC = () => {
 
         // Поиск категорий
         const categoriesResponse = await api.get(
-          `/categories?search=${encodeURIComponent(query)}&limit=10`,
+          `/categories?search=${encodeURIComponent(query)}&limit=10`
         );
         const categories = categoriesResponse.data.map((category: any) => ({
           type: "category" as const,
@@ -205,10 +205,7 @@ const SearchPage: React.FC = () => {
                       >
                         <div className="h-48 overflow-hidden">
                           <img
-                            src={
-                              product.image_url ||
-                              "https://via.placeholder.com/300x300?text=Натяжной+потолок"
-                            }
+                            src={product.image_url || "/no_photo.png"}
                             alt={product.name}
                             className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                           />

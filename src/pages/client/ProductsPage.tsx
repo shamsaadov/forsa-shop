@@ -376,10 +376,7 @@ const ProductsPage: React.FC = () => {
               >
                 <div className="h-48 overflow-hidden">
                   <img
-                    src={
-                      product.image_url ||
-                      "https://via.placeholder.com/300x300?text=Натяжной+потолок"
-                    }
+                    src={product.image_url || "/no_photo.png"}
                     alt={product.name}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />

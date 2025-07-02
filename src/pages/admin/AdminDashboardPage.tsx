@@ -179,10 +179,7 @@ const AdminDashboardPage: React.FC = () => {
                           <div className="flex items-center">
                             <div className="h-10 w-10 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
                               <img
-                                src={
-                                  product.image_url ||
-                                  "https://placehold.co/40x40/f0f0f0/a0a0a0?text=Forsa"
-                                }
+                                src={product.image_url || "/no_photo.png"}
                                 alt={product.name}
                                 className="h-full w-full object-cover"
                               />

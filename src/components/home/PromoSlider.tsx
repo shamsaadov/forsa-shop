@@ -116,7 +116,7 @@ const PromoSlider: React.FC = () => {
               <div
                 className="relative h-[400px] md:h-[500px] bg-center bg-cover"
                 style={{
-                  backgroundImage: `url(${item.image_url || "https://via.placeholder.com/1200x500?text=Натяжной+потолок"})`,
+                  backgroundImage: `url(${item.image_url || "/no_photo.png"})`,
                 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30"></div>

@@ -42,7 +42,7 @@ const CategoryPage: React.FC = () => {
           api
             .get<Product[]>(`/products/category/${cat.id}`)
             .then((res) => ({ id: cat.id, products: res.data }))
-            .catch(() => ({ id: cat.id, products: [] as Product[] })),
+            .catch(() => ({ id: cat.id, products: [] as Product[] }))
         );
 
         const results = await Promise.all(productPromises);
@@ -127,10 +127,7 @@ const CategoryPage: React.FC = () => {
                 >
                   <div className="h-32 overflow-hidden">
                     <img
-                      src={
-                        prod.image_url ||
-                        "https://via.placeholder.com/300x300?text=Нет+изображения"
-                      }
+                      src={prod.image_url || "/no_photo.png"}
                       alt={prod.name}
                       className="w-full h-full object-cover"
                     />

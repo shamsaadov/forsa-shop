@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Category } from '@/types';
-import { Card, CardContent } from '@/components/ui/card';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Category } from "@/types";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CategoryCardProps {
   category: Category;
@@ -9,7 +9,7 @@ interface CategoryCardProps {
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
   // Дефолтное изображение, если нет изображения категории
-  const defaultImage = 'https://placehold.co/300x200/f0f0f0/a0a0a0?text=Категория';
+  const defaultImage = "/no_photo.png";
 
   return (
     <Link to={`/categories/${category.slug}`}>
@@ -24,7 +24,9 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
         <CardContent className="p-4">
           <h3 className="text-xl font-medium mb-2">{category.name}</h3>
           {category.description && (
-            <p className="text-gray-500 text-sm line-clamp-2">{category.description}</p>
+            <p className="text-gray-500 text-sm line-clamp-2">
+              {category.description}
+            </p>
           )}
         </CardContent>
       </Card>

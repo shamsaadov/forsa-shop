@@ -117,10 +117,7 @@ const HomePage: React.FC = () => {
                   >
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
                     <img
-                      src={
-                        category.image_url ||
-                        "https://via.placeholder.com/600x400?text=Натяжные+потолки"
-                      }
+                      src={category.image_url || "/no_photo.png"}
                       alt={category.name}
                       className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -173,10 +170,7 @@ const HomePage: React.FC = () => {
                     >
                       <div className="h-40 overflow-hidden">
                         <img
-                          src={
-                            product.image_url ||
-                            "https://via.placeholder.com/300x300?text=Натяжной+потолок"
-                          }
+                          src={product.image_url || "/no_photo.png"}
                           alt={product.name}
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         />

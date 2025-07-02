@@ -14,7 +14,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
 
   // Дефолтное изображение, если нет изображения товара
-  const defaultImage = "https://placehold.co/300x200/f0f0f0/a0a0a0?text=Forsa";
+  const defaultImage = "/no_photo.png";
 
   // Форматирование цены
   const formatPrice = (price: number) => {

@@ -114,7 +114,7 @@ const AdminProductsPage: React.FC = () => {
 
       // Обновляем список товаров
       setProducts((prevProducts) =>
-        prevProducts.filter((p) => p.id !== productToDelete.id),
+        prevProducts.filter((p) => p.id !== productToDelete.id)
       );
 
       setIsDeleteDialogOpen(false);
@@ -285,10 +285,7 @@ const AdminProductsPage: React.FC = () => {
                     <div className="flex items-center">
                       <div className="relative h-10 w-10 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
                         <img
-                          src={
-                            product.image_url ||
-                            "https://placehold.co/40x40/f0f0f0/a0a0a0?text=Forsa"
-                          }
+                          src={product.image_url || "/no_photo.png"}
                           alt={product.name}
                           className="h-full w-full object-cover"
                         />
@@ -323,7 +320,7 @@ const AdminProductsPage: React.FC = () => {
                           {/*@ts-ignore*/}
                           {product?.categories.map((categoryId) => {
                             const category = categories.find(
-                              (c) => String(c.id) === String(categoryId),
+                              (c) => String(c.id) === String(categoryId)
                             );
                             return category ? (
                               <span

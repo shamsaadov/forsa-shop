@@ -61,7 +61,7 @@ const ProductPage: React.FC = () => {
 
       try {
         const response = await api.get(
-          `/products/category/${product.category_id}?limit=4&exclude=${product.id}`,
+          `/products/category/${product.category_id}?limit=4&exclude=${product.id}`
         );
         setRelatedProducts(response.data);
       } catch (err) {
@@ -89,7 +89,7 @@ const ProductPage: React.FC = () => {
           price: product.price,
           image_url: product.image_url,
         },
-        quantity,
+        quantity
       );
 
       // Уведомление или другая логика после добавления в корзину
@@ -130,7 +130,7 @@ const ProductPage: React.FC = () => {
 
     // Если нет изображений вообще, показываем заглушку
     if (images.length === 0) {
-      images.push("https://via.placeholder.com/600x600?text=Натяжной+потолок");
+      images.push("/no_photo.png");
     }
 
     return images;
@@ -372,7 +372,7 @@ const ProductPage: React.FC = () => {
                   onClick={() =>
                     window.open(
                       `https://wa.me/79998887766?text=Здравствуйте! Меня интересует товар "${product.name}" за ${product.price} руб/м². Можно получить более подробную информацию?`,
-                      "_blank",
+                      "_blank"
                     )
                   }
                 >
@@ -574,10 +574,7 @@ const ProductPage: React.FC = () => {
                 >
                   <div className="h-32 md:h-40 overflow-hidden">
                     <img
-                      src={
-                        relatedProduct.image_url ||
-                        "https://via.placeholder.com/300x300?text=Натяжной+потолок"
-                      }
+                      src={relatedProduct.image_url || "/no_photo.png"}
                       alt={relatedProduct.name}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
