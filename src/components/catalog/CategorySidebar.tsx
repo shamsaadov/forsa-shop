@@ -54,7 +54,7 @@ const CategorySidebar: React.FC<CategorySidebarProps> = ({
       } catch (error) {
         console.error(
           `Error loading products for category ${categoryId}:`,
-          error,
+          error
         );
         setProductsLoading((prev) => ({ ...prev, [categoryId]: false }));
       }
@@ -151,7 +151,7 @@ const CategorySidebar: React.FC<CategorySidebarProps> = ({
                         >
                           {product.image_url && (
                             <img
-                              src={product.image_url}
+                              src={product.image_url || "/no_photo.png"}
                               alt={product.name}
                               className="w-8 h-8 object-cover rounded"
                             />

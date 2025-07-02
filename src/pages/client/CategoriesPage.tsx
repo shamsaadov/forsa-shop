@@ -101,7 +101,7 @@ const CategoryPage: React.FC = () => {
           <div className="flex items-center gap-4 mb-4">
             {cat.image_url && (
               <img
-                src={cat.image_url}
+                src={cat.image_url || "/no_photo.png"}
                 alt={cat.name}
                 className="w-12 h-12 rounded-lg object-cover"
               />

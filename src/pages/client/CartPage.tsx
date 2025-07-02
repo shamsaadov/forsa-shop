@@ -60,7 +60,7 @@ const CartPage: React.FC = () => {
 
   // Обработчик изменения полей формы
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -83,7 +83,7 @@ const CartPage: React.FC = () => {
       errors.customer_phone = "Пожалуйста, укажите телефон";
     } else if (
       !/^(\+7|8)?[\s-]?\(?[0-9]{3}\)?[\s-]?[0-9]{3}[\s-]?[0-9]{2}[\s-]?[0-9]{2}$/.test(
-        formData.customer_phone,
+        formData.customer_phone
       )
     ) {
       errors.customer_phone = "Укажите корректный номер телефона";
@@ -109,7 +109,7 @@ const CartPage: React.FC = () => {
 
     if (items.length === 0) {
       setOrderError(
-        "Ваша корзина пуста. Добавьте товары перед оформлением заказа.",
+        "Ваша корзина пуста. Добавьте товары перед оформлением заказа."
       );
       return;
     }
@@ -146,7 +146,7 @@ const CartPage: React.FC = () => {
       console.error("Error creating order:", error);
       setOrderError(
         error.response?.data?.message ||
-          "Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте позже.",
+          "Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте позже."
       );
     } finally {
       setIsSubmitting(false);
@@ -157,7 +157,7 @@ const CartPage: React.FC = () => {
   const handleAdminOrder = async () => {
     if (items.length === 0) {
       setOrderError(
-        "Ваша корзина пуста. Добавьте товары перед оформлением заказа.",
+        "Ваша корзина пуста. Добавьте товары перед оформлением заказа."
       );
       return;
     }
@@ -192,7 +192,7 @@ const CartPage: React.FC = () => {
       console.error("Error creating admin order:", error);
       setOrderError(
         error.response?.data?.message ||
-          "Произошла ошибка при оформлении заказа в админку. Пожалуйста, попробуйте позже.",
+          "Произошла ошибка при оформлении заказа в админку. Пожалуйста, попробуйте позже."
       );
     } finally {
       setIsSubmitting(false);
@@ -203,7 +203,7 @@ const CartPage: React.FC = () => {
   const handleWhatsAppOrder = () => {
     if (items.length === 0) {
       setOrderError(
-        "Ваша корзина пуста. Добавьте товары перед оформлением заказа.",
+        "Ваша корзина пуста. Добавьте товары перед оформлением заказа."
       );
       return;
     }
@@ -211,7 +211,7 @@ const CartPage: React.FC = () => {
     const cartItemsText = items
       .map(
         (item: any) =>
-          `• ${item.name} - ${item.quantity} м² x ${item.price} ₽ = ${item.quantity * item.price} ₽`,
+          `• ${item.name} - ${item.quantity} м² x ${item.price} ₽ = ${item.quantity * item.price} ₽`
       )
       .join("%0A");
 
@@ -262,7 +262,7 @@ const CartPage: React.FC = () => {
                         <div className="flex items-center">
                           {item.product.image_url ? (
                             <img
-                              src={item.product.image_url}
+                              src={item.product.image_url || "/no_photo.png"}
                               alt={item.product.name}
                               className="w-16 h-16 object-cover rounded mr-4"
                             />
