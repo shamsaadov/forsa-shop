@@ -14,6 +14,8 @@ server/dist/
 .env.development
 server/.env
 
+.idea
+
 # Logs
 *.log
 npm-debug.log*
