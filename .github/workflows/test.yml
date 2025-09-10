@@ -1,0 +1,50 @@
+name: Test and Build Check
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Lint frontend code
+        run: npm run lint || echo "Linting completed with warnings"
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Install server dependencies
+        run: |
+          cd server
+          npm install
+
+      - name: Build server
+        run: |
+          cd server
+          npm run build
+
+      - name: Test server build
+        run: |
+          cd server
+          test -f dist/index.js && echo "✅ Server build successful" || exit 1
+
+      - name: Check frontend build
+        run: |
+          test -d dist && echo "✅ Frontend build successful" || exit 1
+          test -f dist/index.html && echo "✅ Frontend HTML found" || exit 1

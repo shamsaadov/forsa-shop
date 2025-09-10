@@ -1,0 +1,85 @@
+name: Deploy to Production Server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Позволяет запускать вручную
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies and build frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            set -e
+            echo "🚀 Starting deployment..."
+
+            # Переходим в директорию проекта
+            cd /var/www/forsa-shop
+
+            # Останавливаем приложение
+            echo "⏹️ Stopping application..."
+            pm2 stop forsa-shop || true
+
+            # Обновляем код из git
+            echo "📥 Updating code from git..."
+            git fetch --all
+            git reset --hard origin/main
+            git pull origin main
+
+            # Устанавливаем зависимости и собираем фронтенд
+            echo "📦 Installing frontend dependencies..."
+            npm install
+
+            echo "🔨 Building frontend..."
+            npm run build
+
+            # Переходим в серверную часть
+            echo "📦 Installing server dependencies..."
+            cd server
+            npm install
+
+            echo "🔨 Building server..."
+            npm run build
+
+            # Возвращаемся в корень
+            cd ..
+
+            # Запускаем приложение
+            echo "▶️ Starting application..."
+            pm2 start ecosystem.config.cjs --env production || pm2 restart forsa-shop
+
+            # Проверяем статус
+            echo "✅ Checking application status..."
+            pm2 status
+
+            # Перезагружаем nginx для обновления статики
+            echo "🌐 Reloading nginx..."
+            sudo systemctl reload nginx
+
+            echo "🎉 Deployment completed successfully!"
+            echo "🌐 Site: https://forsa-potolki.ru"
+
+            # Показываем последние логи
+            echo "📋 Recent logs:"
+            pm2 logs forsa-shop --lines 5 --nostream
