@@ -42,6 +42,7 @@ const queryClient = new QueryClient();
 const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isAdmin, isLoading } = useAuth();
 
+  console.log("Проверка автодеплоя прошла успешно!");
   // Пока проверяем авторизацию, показываем загрузку
   if (isLoading) {
     return (
